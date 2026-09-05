@@ -38,57 +38,31 @@ def _build_documents():
         research_areas = prof.get("research_areas", [])
         publications = prof.get("publications", [])
 
+        # Strictly index only faculty who have publications
+        if not publications:
+            continue
+
         full_profile = f"""Name: {name}
 Department: {department}
 Mobile Number: {mobile}
 Research Areas: {', '.join(research_areas)}
 Publications: {', '.join(publications)}"""
 
-        base_meta = {
-            "name": name,
-            "department": department,
-            "mobile_number": str(mobile).strip(),
-            "research_areas": ", ".join(research_areas),
-            "publications": ", ".join(publications),
-            "has_publications": len(publications) > 0,
-            "full_profile": full_profile,
-        }
+        pub_text = f"Faculty: {name}. Publications: {'; '.join(publications)}"
 
-        # 1. Publication document (primary evidence)
-        if publications:
-            pub_text = f"Faculty: {name}. Publications: {'; '.join(publications)}"
-            pub_meta = dict(base_meta)
-            pub_meta["doc_type"] = "publication"
-            documents.append(
-                Document(
-                    page_content=pub_text,
-                    metadata=pub_meta,
-                )
+        documents.append(
+            Document(
+                page_content=pub_text,
+                metadata={
+                    "name": name,
+                    "department": department,
+                    "mobile_number": str(mobile).strip(),
+                    "research_areas": ", ".join(research_areas),
+                    "publications": ", ".join(publications),
+                    "full_profile": full_profile,
+                },
             )
-
-        # 2. Research Area document (secondary evidence)
-        if research_areas:
-            area_text = f"Faculty: {name}. Research Areas: {', '.join(research_areas)}"
-            area_meta = dict(base_meta)
-            area_meta["doc_type"] = "research_area"
-            documents.append(
-                Document(
-                    page_content=area_text,
-                    metadata=area_meta,
-                )
-            )
-
-        # Fallback profile if both are empty
-        if not publications and not research_areas:
-            fallback_text = f"Faculty: {name}. Department: {department}."
-            fallback_meta = dict(base_meta)
-            fallback_meta["doc_type"] = "general"
-            documents.append(
-                Document(
-                    page_content=fallback_text,
-                    metadata=fallback_meta,
-                )
-            )
+        )
 
     return documents
 
