@@ -60,31 +60,51 @@ Mobile Number: {mobile}
 Research Areas: {', '.join(research_areas)}
 Publications: {', '.join(publications)}"""
 
-        research_text = " ".join(research_areas + publications).lower()
-        prof_tokens = set(re.findall(r"\w+", research_text))
+        pub_text = " ".join(publications).lower()
+        area_text = " ".join(research_areas).lower()
 
-        is_exact = any(clean_query == pub.lower() or clean_query in pub.lower() for pub in publications) or \
-                   any(clean_query == area.lower() or clean_query in area.lower() for area in research_areas)
+        pub_tokens = set(re.findall(r"\w+", pub_text))
+        area_tokens = set(re.findall(r"\w+", area_text))
 
-        if is_exact:
-            score = 100.0
-        elif query_tokens and prof_tokens:
-            common = query_tokens.intersection(prof_tokens)
-            if common:
-                score = round(min(95.0, (len(common) / len(query_tokens)) * 90.0), 2)
-            else:
-                score = 0.0
+        # Check exact matches
+        is_exact_pub = any(clean_query == pub.lower() or clean_query in pub.lower() for pub in publications)
+        is_exact_area = any(clean_query == area.lower() or clean_query in area.lower() for area in research_areas)
+
+        if is_exact_pub:
+            pub_score = 100.0
+        elif query_tokens and pub_tokens:
+            common_pub = query_tokens.intersection(pub_tokens)
+            pub_score = round(min(95.0, (len(common_pub) / len(query_tokens)) * 90.0), 2) if common_pub else 0.0
         else:
-            score = 0.0
+            pub_score = 0.0
 
-        if score > 0:
+        if is_exact_area:
+            area_score = 100.0
+        elif query_tokens and area_tokens:
+            common_area = query_tokens.intersection(area_tokens)
+            area_score = round(min(95.0, (len(common_area) / len(query_tokens)) * 90.0), 2) if common_area else 0.0
+        else:
+            area_score = 0.0
+
+        # Hierarchical scoring: Publications first (70%), Research Areas second (30%)
+        if pub_score > 0:
+            final_score = round((0.70 * pub_score) + (0.30 * area_score), 2)
+        elif area_score > 0:
+            # Scaled score when only general research areas match without publications
+            final_score = round(0.50 * area_score, 2)
+        else:
+            final_score = 0.0
+
+        if final_score > 0:
             scored.append({
                 "name": name,
                 "department": department,
                 "mobile_number": str(mobile),
                 "research_areas": ", ".join(research_areas),
                 "publications": ", ".join(publications),
-                "score": score,
+                "pub_score": pub_score,
+                "area_score": area_score,
+                "score": final_score,
                 "content": full_profile,
             })
 
@@ -102,39 +122,79 @@ def retrieve_faculty(query: str, k: int = 5):
         if total == 0:
             return fallback_retrieve_faculty(query, k=k)
 
-        fetch_k = min(total, (k * 2) if k else total)
-        results = db.similarity_search_with_score(query, k=fetch_k or total)
-
+        # Retrieve all candidate documents to compute multi-field scores
+        results = db.similarity_search_with_score(query, k=total)
         clean_query = query.strip().lower()
 
-        seen = {}
+        faculty_records = {}
+
         for doc, score in results:
             similarity = _calculate_similarity(score)
             name = doc.metadata.get("name", "Unknown")
+            doc_type = doc.metadata.get("doc_type", "general")
 
-            research_areas_text = doc.metadata.get("research_areas", "").lower()
-            publications_text = doc.metadata.get("publications", "").lower()
-
-            if clean_query and (
-                clean_query in publications_text
-                or clean_query in research_areas_text
-            ):
-                similarity = 100.0
-
-            full_profile = doc.metadata.get("full_profile") or doc.page_content
-
-            if name not in seen or similarity > seen[name]["score"]:
-                seen[name] = {
+            if name not in faculty_records:
+                faculty_records[name] = {
                     "name": name,
                     "department": doc.metadata.get("department", "N/A"),
                     "mobile_number": doc.metadata.get("mobile_number", "N/A"),
-                    "research_areas": doc.metadata.get("research_areas", "N/A"),
-                    "publications": doc.metadata.get("publications", "N/A"),
-                    "score": similarity,
-                    "content": full_profile,
+                    "research_areas": doc.metadata.get("research_areas", ""),
+                    "publications": doc.metadata.get("publications", ""),
+                    "full_profile": doc.metadata.get("full_profile") or doc.page_content,
+                    "pub_sim": 0.0,
+                    "area_sim": 0.0,
+                    "has_publications": bool(doc.metadata.get("publications")),
                 }
 
-        matches = list(seen.values())
+            if doc_type == "publication":
+                faculty_records[name]["pub_sim"] = max(
+                    faculty_records[name]["pub_sim"], similarity
+                )
+            elif doc_type == "research_area":
+                faculty_records[name]["area_sim"] = max(
+                    faculty_records[name]["area_sim"], similarity
+                )
+            else:
+                faculty_records[name]["area_sim"] = max(
+                    faculty_records[name]["area_sim"], similarity
+                )
+
+        # Compute final hierarchical match score
+        matches = []
+        for record in faculty_records.values():
+            pub_sim = record["pub_sim"]
+            area_sim = record["area_sim"]
+            pub_text = record["publications"].lower()
+            area_text = record["research_areas"].lower()
+
+            # Exact keyword boost
+            if clean_query and clean_query in pub_text:
+                pub_sim = 100.0
+            if clean_query and clean_query in area_text:
+                area_sim = 100.0
+
+            if pub_sim > 0:
+                # Publications primary (70%), Research Areas secondary (30%)
+                final_score = round((0.70 * pub_sim) + (0.30 * area_sim), 2)
+            elif area_sim > 0:
+                # Scaled score for research areas without publications
+                final_score = round(0.50 * area_sim, 2)
+            else:
+                final_score = 0.0
+
+            if final_score > 0:
+                matches.append({
+                    "name": record["name"],
+                    "department": record["department"],
+                    "mobile_number": record["mobile_number"],
+                    "research_areas": record["research_areas"],
+                    "publications": record["publications"],
+                    "pub_score": pub_sim,
+                    "area_score": area_sim,
+                    "score": final_score,
+                    "content": record["full_profile"],
+                })
+
         matches.sort(key=lambda match: match["score"], reverse=True)
         if matches:
             return matches[:k] if k else matches
@@ -143,3 +203,4 @@ def retrieve_faculty(query: str, k: int = 5):
     except Exception as e:
         print(f"Vector retrieval exception ({e}), falling back to direct search.")
         return fallback_retrieve_faculty(query, k=k)
+

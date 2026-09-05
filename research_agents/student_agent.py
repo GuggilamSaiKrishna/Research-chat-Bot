@@ -11,6 +11,8 @@ def display_faculty_matches(matches, top_n: int = 5):
         if faculty.get("mobile_number") and faculty["mobile_number"] != "N/A":
             print(f"   Mobile: {faculty['mobile_number']}")
         print(f"   Research Areas: {faculty['research_areas']}")
+        pubs = faculty.get("publications", "").strip()
+        print(f"   Publications: {pubs if pubs and pubs != 'N/A' else 'None listed'}")
         print()
 
 
