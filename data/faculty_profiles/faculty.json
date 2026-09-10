@@ -14,6 +14,49 @@
     "publications": []
   },
   {
+    "name": "Mr. Brundavanam Satyasai",
+    "department": "Advanced Computer Science and Engineering",
+    "designation": "Assistant Professor",
+    "mobile_number": "8330983764",
+    "research_areas": [
+      "Deep Learning",
+      "Signal Processing",
+      "Image Processing"
+    ],
+    "publications": [
+      "CM-VGG16: ConvMixer-Enhanced VGG16 Model for Automatic Detection of Heart Valve Diseases from Phonocardiogram Signals",
+      "Design of Threshold Logic Flip-Flops for Achieving Efficient Performance of Systems"
+    ]
+  },
+  {
+    "name": "Dr. B Sudharani",
+    "department": "Advanced Computer Science and Engineering",
+    "designation": "Assistant Professor",
+    "mobile_number": "Not Available",
+    "research_areas": [
+      "VLSI",
+      "Machine Learning"
+    ],
+    "publications": [
+      "Enhancing Face Recognition Performance: A Comprehensive Evaluation of Deep Learning Models and a Novel Ensemble Approach with Hyperparameter Tuning",
+      "Modular Multi Node Sensor Based Precision Farming For The Improved Performance of Crops",
+      "Implementation of Novel Approximate Adder Using Parallel Prefix Structure",
+      "Image Fusion Using Fast Discrete Curvelet Transform",
+      "Detecting and Correcting Multiple Bit Upsets in Static Random Access Memories",
+      "Driving Authentication System Based on Finger Print Recognition",
+      "Estimation of Wind Speed of MST Radar Signal Using Wavelets",
+      "High Frequency CMOS Digital Circuits with Efficient Power Utilization using Replica Bias Scheme",
+      "Improving SNR of Radar Signal Using Wavelet De-Noising Scheme",
+      "Reliable Adaptive Modulation Aided by LRP for SFH Channels",
+      "A Better Thresholding Technique for Image Denoising Based on Wavelet Transform",
+      "A Review on Different Multiplier Techniques",
+      "An Evolutionary Method of Approximating a Multiplier with High Speed Reversible Logics",
+      "Design of High Speed Approximate Multipliers with Inexact Compressor Adder",
+      "Dynamic HCA Protocol for a Multi-Interface Wireless Mesh Network",
+      "Wavelet Transform for a Fuzzy Based Image Fusion"
+    ]
+  },
+  {
     "name": "Ms. Kondapalli Krupa Sagari",
     "department": "Advanced Computer Science and Engineering",
     "designation": "Professor",
@@ -79,64 +122,62 @@
       "Hybrid Dimensional Reduction Techniques"
     ]
   },
-  [
-    {
-      "name": "Dr. Amar Jukuntla",
-      "department": "Advanced Computer Science and Engineering",
-      "designation": "Assistant Professor",
-      "mobile_number": "1649",
-      "research_areas": [
-        "Wireless Sensor Networks",
-        "Multi Agent System"
-      ],
-      "publications": [
-        "Energy-efficient mobile sink data collection in wireless sensor networks using LEACH with rendezvous nodes",
-        "Investigating the Effectiveness of Hash Line Baseline for File Integrity Monitoring",
-        "Maximizing the Lifetime of Wireless Sensor Networks through Fuzzy Controller-Based LEACH Protocol with Longevity Constraints",
-        "A Comparative Analysis on Variants of LEACH based routing protocols for prolonging network lifetime: Survey",
-        "Energy Efficiency Scheme for Wireless Sensor Network with Rendezvous Nodes and Mobile Sink"
-      ]
-    },
-    {
-      "name": "Dr. Eva Patel",
-      "department": "Advanced Computer Science and Engineering",
-      "designation": "Associate Professor",
-      "mobile_number": "Not Available",
-      "research_areas": [
-        "Cloud Computing",
-        "Cloud Workload Prediction",
-        "Machine Learning",
-        "Deep Learning"
-      ],
-      "publications": [
-        "An integrated deep learning prediction approach for efficient modelling of host load patterns in cloud computing",
-        "A hybrid CNN-LSTM model for predicting server load in cloud computing",
-        "Clustering cloud workloads: K-means vs gaussian mixture model",
-        "Analysis of workloads for cloud infrastructure capacity planning",
-        "Neural Network Based Classification of Virtual Machines in IaaS"
-      ]
-    },
-    {
-      "name": "Dr. Jawad Ahmad Dar",
-      "department": "Advanced Computer Science and Engineering",
-      "designation": "Associate Professor",
-      "mobile_number": "7006157037",
-      "research_areas": [
-        "Artificial Intelligence",
-        "Machine Learning",
-        "Deep Learning",
-        "Image Processing",
-        "Reinforcement Learning"
-      ],
-      "publications": [
-        "Optimization Based Deep Learning for COVID-19 Detection Using Respiratory Sound Signals",
-        "Lung anomaly detection from respiratory sound database (sound signals)",
-        "Henry gas bird swarm optimization algorithm-based deep learning for brain tumor classification using magnetic resonance imaging",
-        "Design and development of hybrid optimization enabled deep learning model for COVID-19 detection with comparative analysis with DCNN, BIAT-GRU, XGBoost",
-        "Spectral features and optimal Hierarchical attention networks for pulmonary abnormality detection from the respiratory sound signals"
-      ]
-    }
-  ]
+  {
+    "name": "Dr. Amar Jukuntla",
+    "department": "Advanced Computer Science and Engineering",
+    "designation": "Assistant Professor",
+    "mobile_number": "1649",
+    "research_areas": [
+      "Wireless Sensor Networks",
+      "Multi Agent System"
+    ],
+    "publications": [
+      "Energy-efficient mobile sink data collection in wireless sensor networks using LEACH with rendezvous nodes",
+      "Investigating the Effectiveness of Hash Line Baseline for File Integrity Monitoring",
+      "Maximizing the Lifetime of Wireless Sensor Networks through Fuzzy Controller-Based LEACH Protocol with Longevity Constraints",
+      "A Comparative Analysis on Variants of LEACH based routing protocols for prolonging network lifetime: Survey",
+      "Energy Efficiency Scheme for Wireless Sensor Network with Rendezvous Nodes and Mobile Sink"
+    ]
+  },
+  {
+    "name": "Dr. Eva Patel",
+    "department": "Advanced Computer Science and Engineering",
+    "designation": "Associate Professor",
+    "mobile_number": "Not Available",
+    "research_areas": [
+      "Cloud Computing",
+      "Cloud Workload Prediction",
+      "Machine Learning",
+      "Deep Learning"
+    ],
+    "publications": [
+      "An integrated deep learning prediction approach for efficient modelling of host load patterns in cloud computing",
+      "A hybrid CNN-LSTM model for predicting server load in cloud computing",
+      "Clustering cloud workloads: K-means vs gaussian mixture model",
+      "Analysis of workloads for cloud infrastructure capacity planning",
+      "Neural Network Based Classification of Virtual Machines in IaaS"
+    ]
+  },
+  {
+    "name": "Dr. Jawad Ahmad Dar",
+    "department": "Advanced Computer Science and Engineering",
+    "designation": "Associate Professor",
+    "mobile_number": "7006157037",
+    "research_areas": [
+      "Artificial Intelligence",
+      "Machine Learning",
+      "Deep Learning",
+      "Image Processing",
+      "Reinforcement Learning"
+    ],
+    "publications": [
+      "Optimization Based Deep Learning for COVID-19 Detection Using Respiratory Sound Signals",
+      "Lung anomaly detection from respiratory sound database (sound signals)",
+      "Henry gas bird swarm optimization algorithm-based deep learning for brain tumor classification using magnetic resonance imaging",
+      "Design and development of hybrid optimization enabled deep learning model for COVID-19 detection with comparative analysis with DCNN, BIAT-GRU, XGBoost",
+      "Spectral features and optimal Hierarchical attention networks for pulmonary abnormality detection from the respiratory sound signals"
+    ]
+  },
   {
     "name": "Dr. D.S. Bhupal Naik",
     "department": "Advanced Computer Science and Engineering",
@@ -223,17 +264,6 @@
     "publications": []
   },
   {
-    "name": "Dr. B. Sudharani",
-    "department": "Advanced Computer Science and Engineering",
-    "designation": "Assistant Professor",
-    "mobile_number": "",
-    "research_areas": [
-      "VLSI",
-      "Machine Learning"
-    ],
-    "publications": []
-  },
-  {
     "name": "Dr. P.M. Benson Mansingh",
     "department": "Advanced Computer Science and Engineering",
     "designation": "Assistant Professor",
@@ -269,13 +299,16 @@
     "name": "Mr. Brundavanam Satyasai",
     "department": "Advanced Computer Science and Engineering",
     "designation": "Assistant Professor",
-    "mobile_number": "",
+    "mobile_number": "8330983764",
     "research_areas": [
       "Deep Learning",
       "Signal Processing",
       "Image Processing"
     ],
-    "publications": []
+    "publications": [
+      "CM-VGG16: ConvMixer-Enhanced VGG16 Model for Automatic Detection of Heart Valve Diseases from Phonocardiogram Signals",
+      "Design of Threshold Logic Flip-Flops for Achieving Efficient Performance of Systems"
+    ]
   },
   {
     "name": "Dr. Ch Amarendra",
@@ -420,14 +453,21 @@
     "name": "Dr. Sateesh Kumar Reddy",
     "department": "Advanced Computer Science and Engineering",
     "designation": "Assistant Professor",
-    "mobile_number": "",
+    "mobile_number": "9848052474",
     "research_areas": [
       "Biomedical Signal Processing",
       "Biomedical Image Processing",
       "Machine Learning",
       "Deep Learning"
     ],
-    "publications": []
+    "publications": [
+      "A 1-D CNN-FCM Model for the Classification of Epileptic Seizure Disorders",
+      "A deep neural network for the classification of epileptic seizures using hierarchical attention mechanism",
+      "An optimised machine learning algorithm for classification of epileptic seizures using EMD-based dynamic features of EEG",
+      "Statistical Analysis and Deep Learning Associated Modeling for Early Stage Detection of Carcinoma",
+      "Edge Architecture for High-Accuracy Disease Identification in Apple Plants Using Transfer Learning Approach",
+      "A 1-D CNN-FSVM Model with a multiscale sub-band feature learning for automated seizure detection"
+    ]
   },
   {
     "name": "Dr. Shaik Mastan Sharif",
