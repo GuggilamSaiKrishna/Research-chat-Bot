@@ -89,7 +89,7 @@ def fallback_retrieve_faculty(query: str, k: int = 5):
 
         if matching_pubs_scored:
             matching_pubs_scored.sort(key=lambda x: x[1], reverse=True)
-            matched_pubs = [p[0] for p in matching_pubs_scored]
+            matched_pubs = [p[0] for p in matching_pubs_scored[:2]]
             best_score = matching_pubs_scored[0][1]
         elif area_common:
             # Query matches research area: pick top relevant publications that overlap with research/query tokens
@@ -99,7 +99,7 @@ def fallback_retrieve_faculty(query: str, k: int = 5):
                 overlap = len(p_tokens.intersection(research_tokens.union(significant_query_tokens)))
                 pub_scores.append((pub, overlap))
             pub_scores.sort(key=lambda x: x[1], reverse=True)
-            matched_pubs = [p[0] for p in pub_scores[:3]]  # Top 3 relevant
+            matched_pubs = [p[0] for p in pub_scores[:2]]  # Top 2 relevant
             best_score = round(min(85.0, (len(area_common) / len(significant_query_tokens)) * 80.0), 2) if significant_query_tokens else 70.0
         else:
             continue
@@ -144,8 +144,9 @@ def retrieve_faculty(query: str, k: int = 5):
         query_tokens = set(re.findall(r"\w+", clean_query))
         significant_tokens = {t for t in query_tokens if t not in stop_words and len(t) > 1}
 
-        # Topic domain filters
-        is_healthcare_query = any(w in clean_query for w in ["health", "healthcare", "medical", "disease", "patient", "cancer", "carcinoma", "seizure", "epileptic", "heart", "lung", "brain", "clinical"])
+        # Broad domain vs specific query detection
+        broad_terms = ["healthcare", "health", "medical", "clinical"]
+        is_broad_healthcare = any(term in clean_query for term in broad_terms)
 
         matches_dict = {}
 
@@ -170,16 +171,26 @@ def retrieve_faculty(query: str, k: int = 5):
                 p_tokens = set(re.findall(r"\w+", p_lower))
                 token_overlap = len(significant_tokens.intersection(p_tokens)) if significant_tokens else 0
 
-                # Negative domain filtering (e.g. exclude agricultural plant papers for healthcare queries)
-                if is_healthcare_query and any(ag in p_lower for ag in ["apple plants", "crop", "farming", "agriculture", "plant"]):
+                is_exact = bool(clean_query and clean_query in p_lower)
+                has_domain_match = is_broad_healthcare and any(w in p_lower for w in ["health", "medical", "disease", "patient", "cancer", "carcinoma", "seizure", "epileptic", "heart", "lung", "brain", "clinical", "eeg", "diabetic", "tumor"])
+
+                # Exclude agricultural plant papers for healthcare queries
+                if is_broad_healthcare and any(ag in p_lower for ag in ["apple plants", "crop", "farming", "agriculture", "plant"]):
                     continue
 
-                # Hybrid scoring
+                # STRICT RULE: Publication MUST directly match query tokens, query substring, or broad domain
+                if not (is_exact or token_overlap > 0 or has_domain_match):
+                    # Hide non-matching publication completely
+                    continue
+
+                # Score matching publication
                 p_sim = similarity
-                if clean_query and (clean_query == p_lower or clean_query in p_lower):
+                if is_exact:
                     p_sim = 100.0
                 elif token_overlap > 0:
                     p_sim = max(p_sim, 80.0 + (token_overlap * 5.0))
+                else:
+                    p_sim = max(p_sim, 75.0)
 
                 if name not in matches_dict:
                     matches_dict[name] = {
@@ -204,17 +215,9 @@ def retrieve_faculty(query: str, k: int = 5):
             if not data["matching_pubs_dict"]:
                 continue
 
-            # Sort publications by score
+            # Sort matching publications by score
             sorted_pubs = sorted(data["matching_pubs_dict"].items(), key=lambda x: x[1], reverse=True)
-            max_pub_score = sorted_pubs[0][1]
-
-            # Filter top matching publications (keep pubs within 5 points of top pub score, or with token overlap)
-            filtered_pubs = []
-            for pub_title, pub_score in sorted_pubs:
-                p_tokens = set(re.findall(r"\w+", pub_title.lower()))
-                has_overlap = bool(significant_tokens.intersection(p_tokens)) if significant_tokens else False
-                if has_overlap or (max_pub_score - pub_score <= 4.0) or len(filtered_pubs) == 0:
-                    filtered_pubs.append(pub_title)
+            filtered_pubs = [p[0] for p in sorted_pubs]
 
             pubs_str = ", ".join(filtered_pubs)
 
