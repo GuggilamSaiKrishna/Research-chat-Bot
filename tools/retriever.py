@@ -45,6 +45,11 @@ def fallback_retrieve_faculty(query: str, k: int = 5):
 
     query_tokens = set(re.findall(r"\w+", query.lower()))
     clean_query = query.strip().lower()
+    # Filter out basic stop words for token matching
+    stop_words = {"for", "in", "and", "the", "of", "to", "a", "with", "on", "using", "by", "an"}
+    significant_query_tokens = {t for t in query_tokens if t not in stop_words and len(t) > 1}
+    if not significant_query_tokens:
+        significant_query_tokens = query_tokens
 
     scored = []
     for prof in faculty:
@@ -58,36 +63,63 @@ def fallback_retrieve_faculty(query: str, k: int = 5):
         if not publications:
             continue
 
+        matching_pubs_scored = []
+        for pub in publications:
+            pub_lower = pub.lower()
+            pub_tokens = set(re.findall(r"\w+", pub_lower))
+
+            if clean_query and (clean_query == pub_lower or clean_query in pub_lower):
+                pub_score = 100.0
+            elif significant_query_tokens and pub_tokens:
+                common = significant_query_tokens.intersection(pub_tokens)
+                if common:
+                    pub_score = round(min(95.0, (len(common) / len(significant_query_tokens)) * 90.0), 2)
+                else:
+                    pub_score = 0.0
+            else:
+                pub_score = 0.0
+
+            if pub_score > 0:
+                matching_pubs_scored.append((pub, pub_score))
+
+        # Check match against research areas if no direct pub title match
+        research_text = " ".join(research_areas).lower()
+        research_tokens = set(re.findall(r"\w+", research_text))
+        area_common = significant_query_tokens.intersection(research_tokens) if significant_query_tokens else set()
+
+        if matching_pubs_scored:
+            matching_pubs_scored.sort(key=lambda x: x[1], reverse=True)
+            matched_pubs = [p[0] for p in matching_pubs_scored]
+            best_score = matching_pubs_scored[0][1]
+        elif area_common:
+            # Query matches research area: pick top relevant publications that overlap with research/query tokens
+            pub_scores = []
+            for pub in publications:
+                p_tokens = set(re.findall(r"\w+", pub.lower()))
+                overlap = len(p_tokens.intersection(research_tokens.union(significant_query_tokens)))
+                pub_scores.append((pub, overlap))
+            pub_scores.sort(key=lambda x: x[1], reverse=True)
+            matched_pubs = [p[0] for p in pub_scores[:3]]  # Top 3 relevant
+            best_score = round(min(85.0, (len(area_common) / len(significant_query_tokens)) * 80.0), 2) if significant_query_tokens else 70.0
+        else:
+            continue
+
         full_profile = f"""Name: {name}
 Department: {department}
 Mobile Number: {mobile}
 Research Areas: {', '.join(research_areas)}
-Publications: {', '.join(publications)}"""
+Matching Publications: {', '.join(matched_pubs)}"""
 
-        pub_text = " ".join(publications).lower()
-        pub_tokens = set(re.findall(r"\w+", pub_text))
-
-        # Check exact match in publications
-        is_exact_pub = any(clean_query == pub.lower() or clean_query in pub.lower() for pub in publications)
-
-        if is_exact_pub:
-            pub_score = 100.0
-        elif query_tokens and pub_tokens:
-            common_pub = query_tokens.intersection(pub_tokens)
-            pub_score = round(min(95.0, (len(common_pub) / len(query_tokens)) * 90.0), 2) if common_pub else 0.0
-        else:
-            pub_score = 0.0
-
-        if pub_score > 0:
-            scored.append({
-                "name": name,
-                "department": department,
-                "mobile_number": str(mobile),
-                "research_areas": ", ".join(research_areas),
-                "publications": ", ".join(publications),
-                "score": pub_score,
-                "content": full_profile,
-            })
+        scored.append({
+            "name": name,
+            "department": department,
+            "mobile_number": str(mobile),
+            "research_areas": ", ".join(research_areas),
+            "publications": ", ".join(matched_pubs),
+            "matching_publications": matched_pubs,
+            "score": best_score,
+            "content": full_profile,
+        })
 
     scored.sort(key=lambda x: x["score"], reverse=True)
     return scored[:k] if k else scored
@@ -104,40 +136,108 @@ def retrieve_faculty(query: str, k: int = 5):
             return fallback_retrieve_faculty(query, k=k)
 
         # Retrieve matching publication documents
-        fetch_k = min(total, (k * 2) if k else total)
-        results = db.similarity_search_with_score(query, k=fetch_k or total)
+        fetch_k = min(total, max(30, (k * 6) if k else total))
+        results = db.similarity_search_with_score(query, k=fetch_k)
         clean_query = query.strip().lower()
+
+        stop_words = {"for", "in", "and", "the", "of", "to", "a", "with", "on", "using", "by", "an"}
+        query_tokens = set(re.findall(r"\w+", clean_query))
+        significant_tokens = {t for t in query_tokens if t not in stop_words and len(t) > 1}
+
+        # Topic domain filters
+        is_healthcare_query = any(w in clean_query for w in ["health", "healthcare", "medical", "disease", "patient", "cancer", "carcinoma", "seizure", "epileptic", "heart", "lung", "brain", "clinical"])
 
         matches_dict = {}
 
         for doc, score in results:
             similarity = _calculate_similarity(score)
             name = doc.metadata.get("name", "Unknown")
-            publications_text = doc.metadata.get("publications", "").strip()
+            department = doc.metadata.get("department", "N/A")
+            mobile = doc.metadata.get("mobile_number", "N/A")
+            research_areas = doc.metadata.get("research_areas", "N/A")
 
-            # Strictly require publications
-            if not publications_text or publications_text == "N/A":
+            pub = doc.metadata.get("publication")
+            if not pub:
+                pubs_text = doc.metadata.get("publications", "").strip()
+                if not pubs_text or pubs_text == "N/A":
+                    continue
+                pub_list = [p.strip() for p in pubs_text.split(",") if p.strip()]
+            else:
+                pub_list = [pub.strip()]
+
+            for p in pub_list:
+                p_lower = p.lower()
+                p_tokens = set(re.findall(r"\w+", p_lower))
+                token_overlap = len(significant_tokens.intersection(p_tokens)) if significant_tokens else 0
+
+                # Negative domain filtering (e.g. exclude agricultural plant papers for healthcare queries)
+                if is_healthcare_query and any(ag in p_lower for ag in ["apple plants", "crop", "farming", "agriculture", "plant"]):
+                    continue
+
+                # Hybrid scoring
+                p_sim = similarity
+                if clean_query and (clean_query == p_lower or clean_query in p_lower):
+                    p_sim = 100.0
+                elif token_overlap > 0:
+                    p_sim = max(p_sim, 80.0 + (token_overlap * 5.0))
+
+                if name not in matches_dict:
+                    matches_dict[name] = {
+                        "name": name,
+                        "department": department,
+                        "mobile_number": mobile,
+                        "research_areas": research_areas,
+                        "matching_pubs_dict": {},
+                        "score": p_sim,
+                        "full_profile": doc.metadata.get("full_profile", ""),
+                    }
+
+                current_dict = matches_dict[name]["matching_pubs_dict"]
+                if p not in current_dict or p_sim > current_dict[p]:
+                    current_dict[p] = p_sim
+
+                if p_sim > matches_dict[name]["score"]:
+                    matches_dict[name]["score"] = p_sim
+
+        formatted_matches = []
+        for name, data in matches_dict.items():
+            if not data["matching_pubs_dict"]:
                 continue
 
-            # Exact keyword match in publications boost
-            if clean_query and clean_query in publications_text.lower():
-                similarity = 100.0
+            # Sort publications by score
+            sorted_pubs = sorted(data["matching_pubs_dict"].items(), key=lambda x: x[1], reverse=True)
+            max_pub_score = sorted_pubs[0][1]
 
-            if name not in matches_dict or similarity > matches_dict[name]["score"]:
-                matches_dict[name] = {
-                    "name": name,
-                    "department": doc.metadata.get("department", "N/A"),
-                    "mobile_number": doc.metadata.get("mobile_number", "N/A"),
-                    "research_areas": doc.metadata.get("research_areas", "N/A"),
-                    "publications": publications_text,
-                    "score": similarity,
-                    "content": doc.metadata.get("full_profile") or doc.page_content,
-                }
+            # Filter top matching publications (keep pubs within 5 points of top pub score, or with token overlap)
+            filtered_pubs = []
+            for pub_title, pub_score in sorted_pubs:
+                p_tokens = set(re.findall(r"\w+", pub_title.lower()))
+                has_overlap = bool(significant_tokens.intersection(p_tokens)) if significant_tokens else False
+                if has_overlap or (max_pub_score - pub_score <= 4.0) or len(filtered_pubs) == 0:
+                    filtered_pubs.append(pub_title)
 
-        matches = list(matches_dict.values())
-        matches.sort(key=lambda match: match["score"], reverse=True)
-        if matches:
-            return matches[:k] if k else matches
+            pubs_str = ", ".join(filtered_pubs)
+
+            full_profile = f"""Name: {name}
+Department: {data['department']}
+Mobile Number: {data['mobile_number']}
+Research Areas: {data['research_areas']}
+Matching Publications: {pubs_str}"""
+
+            formatted_matches.append({
+                "name": name,
+                "department": data["department"],
+                "mobile_number": str(data["mobile_number"]),
+                "research_areas": data["research_areas"],
+                "publications": pubs_str,
+                "matching_publications": filtered_pubs,
+                "score": data["score"],
+                "content": full_profile,
+            })
+
+        formatted_matches.sort(key=lambda match: match["score"], reverse=True)
+        if formatted_matches:
+            return formatted_matches[:k] if k else formatted_matches
         return fallback_retrieve_faculty(query, k=k)
 
     except Exception as e:

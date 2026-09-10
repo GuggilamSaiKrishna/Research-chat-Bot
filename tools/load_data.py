@@ -20,7 +20,7 @@ def _get_data_hash() -> str:
     if not Path(FACULTY_JSON).exists():
         return ""
     with open(FACULTY_JSON, "rb") as f:
-        return hashlib.sha256(f.read()).hexdigest()
+        return hashlib.sha256(f.read() + b"_v2_pub_indexing").hexdigest()
 
 
 def _build_documents():
@@ -48,21 +48,22 @@ Mobile Number: {mobile}
 Research Areas: {', '.join(research_areas)}
 Publications: {', '.join(publications)}"""
 
-        pub_text = f"Faculty: {name}. Publications: {'; '.join(publications)}"
-
-        documents.append(
-            Document(
-                page_content=pub_text,
-                metadata={
-                    "name": name,
-                    "department": department,
-                    "mobile_number": str(mobile).strip(),
-                    "research_areas": ", ".join(research_areas),
-                    "publications": ", ".join(publications),
-                    "full_profile": full_profile,
-                },
+        for pub in publications:
+            pub_text = f"Faculty: {name}. Department: {department}. Research Areas: {', '.join(research_areas)}. Publication: {pub}"
+            documents.append(
+                Document(
+                    page_content=pub_text,
+                    metadata={
+                        "name": name,
+                        "department": department,
+                        "mobile_number": str(mobile).strip(),
+                        "research_areas": ", ".join(research_areas),
+                        "publication": pub,
+                        "all_publications": json.dumps(publications),
+                        "full_profile": full_profile,
+                    },
+                )
             )
-        )
 
     return documents
 
