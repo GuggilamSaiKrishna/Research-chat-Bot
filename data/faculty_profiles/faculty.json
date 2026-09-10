@@ -79,20 +79,64 @@
       "Hybrid Dimensional Reduction Techniques"
     ]
   },
-  {
-    "name": "Dr. Jawad Ahmad Dar",
-    "department": "Advanced Computer Science and Engineering",
-    "designation": "Associate Professor",
-    "mobile_number": "",
-    "research_areas": [
-      "Artificial Intelligence",
-      "Machine Learning",
-      "Deep Learning",
-      "Image Processing",
-      "Reinforcement Learning"
-    ],
-    "publications": []
-  },
+  [
+    {
+      "name": "Dr. Amar Jukuntla",
+      "department": "Advanced Computer Science and Engineering",
+      "designation": "Assistant Professor",
+      "mobile_number": "1649",
+      "research_areas": [
+        "Wireless Sensor Networks",
+        "Multi Agent System"
+      ],
+      "publications": [
+        "Energy-efficient mobile sink data collection in wireless sensor networks using LEACH with rendezvous nodes",
+        "Investigating the Effectiveness of Hash Line Baseline for File Integrity Monitoring",
+        "Maximizing the Lifetime of Wireless Sensor Networks through Fuzzy Controller-Based LEACH Protocol with Longevity Constraints",
+        "A Comparative Analysis on Variants of LEACH based routing protocols for prolonging network lifetime: Survey",
+        "Energy Efficiency Scheme for Wireless Sensor Network with Rendezvous Nodes and Mobile Sink"
+      ]
+    },
+    {
+      "name": "Dr. Eva Patel",
+      "department": "Advanced Computer Science and Engineering",
+      "designation": "Associate Professor",
+      "mobile_number": "Not Available",
+      "research_areas": [
+        "Cloud Computing",
+        "Cloud Workload Prediction",
+        "Machine Learning",
+        "Deep Learning"
+      ],
+      "publications": [
+        "An integrated deep learning prediction approach for efficient modelling of host load patterns in cloud computing",
+        "A hybrid CNN-LSTM model for predicting server load in cloud computing",
+        "Clustering cloud workloads: K-means vs gaussian mixture model",
+        "Analysis of workloads for cloud infrastructure capacity planning",
+        "Neural Network Based Classification of Virtual Machines in IaaS"
+      ]
+    },
+    {
+      "name": "Dr. Jawad Ahmad Dar",
+      "department": "Advanced Computer Science and Engineering",
+      "designation": "Associate Professor",
+      "mobile_number": "7006157037",
+      "research_areas": [
+        "Artificial Intelligence",
+        "Machine Learning",
+        "Deep Learning",
+        "Image Processing",
+        "Reinforcement Learning"
+      ],
+      "publications": [
+        "Optimization Based Deep Learning for COVID-19 Detection Using Respiratory Sound Signals",
+        "Lung anomaly detection from respiratory sound database (sound signals)",
+        "Henry gas bird swarm optimization algorithm-based deep learning for brain tumor classification using magnetic resonance imaging",
+        "Design and development of hybrid optimization enabled deep learning model for COVID-19 detection with comparative analysis with DCNN, BIAT-GRU, XGBoost",
+        "Spectral features and optimal Hierarchical attention networks for pulmonary abnormality detection from the respiratory sound signals"
+      ]
+    }
+  ]
   {
     "name": "Dr. D.S. Bhupal Naik",
     "department": "Advanced Computer Science and Engineering",
@@ -102,19 +146,6 @@
       "Federated Learning",
       "VANETs",
       "Security"
-    ],
-    "publications": []
-  },
-  {
-    "name": "Dr. Eva Patel",
-    "department": "Advanced Computer Science and Engineering",
-    "designation": "Associate Professor",
-    "mobile_number": "",
-    "research_areas": [
-      "Cloud Computing",
-      "Cloud Workload Prediction",
-      "Machine Learning",
-      "Deep Learning"
     ],
     "publications": []
   },
@@ -133,17 +164,6 @@
       "A Two-Stage Deep Learning Approach for Optimizing Fashion Product Recommendations",
       "A Novel Smart AI System for Automated Lung Nodule Detection in CT Scan Images"
     ]
-  },
-  {
-    "name": "Dr. Amar Jukuntla",
-    "department": "Advanced Computer Science and Engineering",
-    "designation": "Assistant Professor",
-    "mobile_number": "",
-    "research_areas": [
-      "Wireless Sensor Network",
-      "Multi Agent System"
-    ],
-    "publications": []
   },
   {
     "name": "Dr. A.V. Nageswara Rao",
