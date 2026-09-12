@@ -11,16 +11,7 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 
 def _secret(key: str) -> str | None:
-    value = os.getenv(key)
-    if value:
-        return value
-
-    try:
-        import streamlit as st
-
-        return st.secrets.get(key)
-    except Exception:
-        return None
+    return os.getenv(key)
 
 
 def get_google_api_key() -> str | None:

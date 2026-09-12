@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vignan's Research Matching Portal</title>
+    <link rel="stylesheet" href="/static/style.css?v=2">
+</head>
+<body>
+
+    <!-- Header Navbar matching Vignan ERP -->
+    <header class="top-navbar">
+        <div class="brand-container">
+            <img src="/static/vignan_logo.png?v=2" alt="Vignan's Foundation for Science, Technology & Research" class="vignan-logo-img">
+        </div>
+        <div class="nav-actions">
+            <nav class="nav-links">
+                <span class="nav-link active">RESEARCH MATCHING</span>
+                <span class="nav-link" onclick="switchTab('student')">STUDENT</span>
+                <span class="nav-link" onclick="switchTab('professor')">PROFESSOR</span>
+            </nav>
+            <button class="nav-btn reload-btn" id="reloadBtn" onclick="reloadData()">
+                🔄 Sync Database
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Banner matching Vignan Portal -->
+    <section class="hero-banner">
+        <div class="hero-content">
+            <h1 class="hero-title">STUDENT & FACULTY <span>RESEARCH SYSTEM</span></h1>
+            <p class="hero-subtitle">VIGNAN'S FOUNDATION FOR SCIENCE, TECHNOLOGY & RESEARCH</p>
+        </div>
+    </section>
+
+    <!-- Main Content Container -->
+    <main class="main-container">
+        
+        <!-- Tab Navigation -->
+        <div class="tab-container">
+            <button class="tab-btn active" id="tabStudent" onclick="switchTab('student')">
+                🎓 Student Portal
+            </button>
+            <button class="tab-btn" id="tabProfessor" onclick="switchTab('professor')">
+                👨‍🏫 Professor Portal
+            </button>
+        </div>
+
+        <!-- Student Search View -->
+        <div id="studentView">
+            <div class="search-card">
+                <div class="search-title">Search Research Topics & Faculty Matching</div>
+                <div class="input-group">
+                    <input type="text" id="studentInput" class="search-input" placeholder="Enter research topic (e.g. machine learning for healthcare, computer vision projects)..." onkeypress="handleKeyPress(event, 'student')">
+                    <button class="btn-primary" onclick="submitStudentQuery()">
+                        SEARCH
+                    </button>
+                </div>
+                <div class="prompts-container">
+                    <span class="prompts-label">Try Examples:</span>
+                    <button class="chip-btn" onclick="usePrompt('machine learning for healthcare', 'student')">Machine Learning in Healthcare</button>
+                    <button class="chip-btn" onclick="usePrompt('project ideas in computer vision', 'student')">Computer Vision Projects</button>
+                    <button class="chip-btn" onclick="usePrompt('collaboration in renewable energy', 'student')">Renewable Energy Collaboration</button>
+                    <button class="chip-btn" onclick="usePrompt('latest trends in blockchain', 'student')">Latest Trends in AI/Blockchain</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Professor View -->
+        <div id="professorView" style="display: none;">
+            <div class="search-card">
+                <div class="search-title">Ask Research Questions & Strategic Directions</div>
+                <div class="input-group">
+                    <input type="text" id="professorInput" class="search-input" placeholder="Ask research question (e.g., recent advances in quantum computing, future directions in NLP)..." onkeypress="handleKeyPress(event, 'professor')">
+                    <button class="btn-primary" onclick="submitProfessorQuery()">
+                        SYNTHESIZE
+                    </button>
+                </div>
+                <div class="prompts-container">
+                    <span class="prompts-label">Try Examples:</span>
+                    <button class="chip-btn" onclick="usePrompt('What are current trends in quantum computing?', 'professor')">Trends in Quantum Computing</button>
+                    <button class="chip-btn" onclick="usePrompt('Recent advances in large language models', 'professor')">Recent Advances in LLMs</button>
+                    <button class="chip-btn" onclick="usePrompt('Future research directions in biomedical engineering', 'professor')">Biomedical Engineering Directions</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner"></div>
+            <div class="loading-text" id="loadingText">Processing research query...</div>
+        </div>
+
+        <!-- Results Area -->
+        <div class="results-container" id="resultsContainer"></div>
+
+    </main>
+
+    <!-- App Footer -->
+    <footer class="app-footer">
+        © Vignan's Foundation for Science, Technology & Research. All rights reserved.
+    </footer>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toastMessage"></div>
+
+    <script src="/static/app.js?v=2"></script>
+</body>
+</html>

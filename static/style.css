@@ -1,0 +1,438 @@
+/* Vignan's University - Research Matching Chatbot Theme */
+:root {
+    --vignan-blue-dark: #005696;
+    --vignan-blue-primary: #1B75BC;
+    --vignan-blue-light: #EBF5FF;
+    --vignan-red: #D31018;
+    --text-dark: #333333;
+    --text-muted: #555555;
+    --bg-page: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --border-color: #CCCCCC;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 14px rgba(0,0,0,0.1);
+    --radius-sm: 4px;
+    --radius-md: 8px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: var(--bg-page);
+    color: var(--text-dark);
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header Top Bar matching Vignan ERP */
+.top-navbar {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 4%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.brand-container {
+    display: flex;
+    align-items: center;
+}
+
+.vignan-logo-img {
+    height: 54px;
+    width: auto;
+    object-fit: contain;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 16px;
+}
+
+.nav-link {
+    font-size: 13px;
+    font-weight: 700;
+    color: #444444;
+    text-transform: uppercase;
+    cursor: pointer;
+    letter-spacing: 0.4px;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--vignan-blue-primary);
+}
+
+.nav-btn {
+    background: transparent;
+    border: 1px solid var(--vignan-blue-primary);
+    padding: 7px 14px;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--vignan-blue-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+    background-color: var(--vignan-blue-primary);
+    color: #FFFFFF;
+}
+
+/* Hero Banner matching Vignan ERP Header */
+.hero-banner {
+    background: linear-gradient(135deg, #005696 0%, #1B75BC 60%, #0072BC 100%);
+    color: #FFFFFF;
+    padding: 45px 5%;
+    text-align: center;
+    box-shadow: inset 0 -3px 8px rgba(0,0,0,0.15);
+}
+
+.hero-title {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.hero-title span {
+    font-weight: 900;
+}
+
+.hero-subtitle {
+    font-size: 13px;
+    font-weight: 400;
+    opacity: 0.95;
+    margin-top: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Main Container */
+.main-container {
+    max-width: 960px;
+    margin: 30px auto 40px;
+    padding: 0 20px;
+    width: 100%;
+    flex: 1;
+}
+
+/* Mode Switcher Tabs */
+.tab-container {
+    display: flex;
+    background-color: #F4F6F9;
+    border-radius: var(--radius-sm);
+    padding: 5px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 24px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 13px 20px;
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    font-weight: 700;
+    color: #666666;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.tab-btn.active {
+    background-color: var(--vignan-blue-primary);
+    color: #FFFFFF;
+    box-shadow: 0 2px 6px rgba(27, 117, 188, 0.3);
+}
+
+/* Search Card */
+.search-card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-sm);
+    padding: 26px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    margin-bottom: 24px;
+}
+
+.search-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--vignan-blue-dark);
+    margin-bottom: 14px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+    border-color: var(--vignan-blue-primary);
+    box-shadow: 0 0 0 2px rgba(27, 117, 188, 0.15);
+}
+
+.btn-primary {
+    background-color: #0072BC;
+    color: #FFFFFF;
+    border: none;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #005696;
+}
+
+/* Quick Prompts (Chips) */
+.prompts-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.prompts-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #777777;
+    text-transform: uppercase;
+    margin-right: 4px;
+}
+
+.chip-btn {
+    background-color: #EBF5FF;
+    color: var(--vignan-blue-dark);
+    border: 1px solid #BEE3F8;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chip-btn:hover {
+    background-color: var(--vignan-blue-primary);
+    color: #FFFFFF;
+    border-color: var(--vignan-blue-primary);
+}
+
+/* Loading State */
+.loading-spinner {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #EBF5FF;
+    border-top: 4px solid var(--vignan-blue-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 14px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666666;
+}
+
+/* Results Area */
+.results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.route-badge {
+    align-self: flex-start;
+    background-color: var(--vignan-blue-dark);
+    color: #FFFFFF;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+/* Faculty Card */
+.faculty-card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-sm);
+    padding: 22px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.2s ease;
+}
+
+.faculty-card:hover {
+    border-color: var(--vignan-blue-primary);
+}
+
+.faculty-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.faculty-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--vignan-blue-dark);
+}
+
+.match-score {
+    background-color: #0072BC;
+    color: #FFFFFF;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.faculty-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.info-item {
+    color: var(--text-dark);
+}
+
+.info-label {
+    font-weight: 700;
+    color: #666666;
+}
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.tag {
+    background-color: #F0F4F8;
+    color: #333333;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.pubs-box {
+    background-color: #F4F8FB;
+    border-left: 4px solid var(--vignan-blue-primary);
+    padding: 10px 14px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--vignan-blue-dark);
+}
+
+/* Generic Content Card */
+.content-card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-sm);
+    padding: 22px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.card-heading {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--vignan-blue-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--vignan-blue-light);
+}
+
+.formatted-text {
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    color: var(--text-dark);
+}
+
+/* Footer */
+.app-footer {
+    background-color: #FFFFFF;
+    border-top: 1px solid var(--border-color);
+    padding: 20px 5%;
+    text-align: center;
+    color: #777777;
+    font-size: 12px;
+    margin-top: auto;
+}
+
+/* Toast Notification */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--vignan-blue-dark);
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: var(--shadow-md);
+    display: none;
+    z-index: 1000;
+}

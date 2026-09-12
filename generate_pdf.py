@@ -174,7 +174,7 @@ def create_pdf(filename="Research_Matching_Chatbot_Explanation.pdf"):
     # Executive Summary Box
     summary_text = (
         "<b>Executive Summary:</b> The Research Matching Chatbot is an AI-driven, multi-agent academic platform "
-        "built using <b>LangGraph</b>, <b>Google Gemini 2.5 Flash LLM</b>, <b>Chroma Vector DB</b>, and <b>Streamlit</b>. "
+        "built using <b>LangGraph</b>, <b>Google Gemini 2.5 Flash LLM</b>, and <b>Chroma Vector DB</b>. "
         "It acts as a dynamic bridge between students and academic faculty members, providing tailored faculty recommendations "
         "via Retrieval-Augmented Generation (RAG), automated research project ideation, interdisciplinary faculty collaboration "
         "analysis, live web research trend lookup, and professor-oriented strategic research synthesis."
