@@ -12,6 +12,7 @@ from langchain_core.documents import Document
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 from config import CHROMA_DIR, FACULTY_JSON, get_google_api_key
+from tools.scrape_vignan_people import scrape_vignan_people
 
 HASH_FILE = Path(CHROMA_DIR) / ".data_hash"
 
@@ -35,38 +36,57 @@ def _build_documents():
         name = prof.get("name", "Unknown").strip()
         department = prof.get("department", "N/A").strip()
         mobile = prof.get("mobile_number") or prof.get("mobile") or "N/A"
+        email = prof.get("email", "N/A").strip()
         research_areas = prof.get("research_areas", [])
         publications = prof.get("publications", [])
 
-        # Strictly index only faculty who have publications
-        if not publications:
+        if not publications and not research_areas:
             continue
 
         full_profile = f"""Name: {name}
 Department: {department}
 Mobile Number: {mobile}
-Research Areas: {', '.join(research_areas)}
-Publications: {', '.join(publications)}"""
+Email: {email}
+Research Areas: {', '.join(research_areas) if research_areas else 'N/A'}
+Publications: {', '.join(publications) if publications else 'N/A'}"""
 
-        for pub in publications:
-            pub_text = f"Faculty: {name}. Department: {department}. Research Areas: {', '.join(research_areas)}. Publication: {pub}"
+        if publications:
+            for pub in publications:
+                pub_text = f"Faculty: {name}. Department: {department}. Research Areas: {', '.join(research_areas)}. Publication: {pub}"
+                documents.append(
+                    Document(
+                        page_content=pub_text,
+                        metadata={
+                            "name": name,
+                            "department": department,
+                            "mobile_number": str(mobile).strip(),
+                            "email": email,
+                            "research_areas": ", ".join(research_areas),
+                            "publication": pub,
+                            "all_publications": json.dumps(publications),
+                            "full_profile": full_profile,
+                        },
+                    )
+                )
+        elif research_areas:
+            area_text = f"Faculty: {name}. Department: {department}. Research Areas: {', '.join(research_areas)}."
             documents.append(
                 Document(
-                    page_content=pub_text,
+                    page_content=area_text,
                     metadata={
                         "name": name,
                         "department": department,
                         "mobile_number": str(mobile).strip(),
+                        "email": email,
                         "research_areas": ", ".join(research_areas),
-                        "publication": pub,
-                        "all_publications": json.dumps(publications),
+                        "publication": "N/A",
+                        "all_publications": json.dumps([]),
                         "full_profile": full_profile,
                     },
                 )
             )
 
     return documents
-
 
 
 def chroma_is_ready() -> bool:
@@ -94,7 +114,11 @@ def chroma_is_up_to_date() -> bool:
         return False
 
 
-def load_faculty_data(rebuild: bool = False) -> bool:
+def load_faculty_data(rebuild: bool = False, scrape_live: bool = False) -> bool:
+    if scrape_live or not Path(FACULTY_JSON).exists():
+        print("Scraping live faculty profiles directly from https://vignan.ac.in/newvignan/people.php...")
+        scrape_vignan_people(max_workers=25)
+
     current_hash = _get_data_hash()
 
     if not rebuild and chroma_is_up_to_date():
@@ -132,9 +156,9 @@ def load_faculty_data(rebuild: bool = False) -> bool:
     return True
 
 
-def ensure_chroma_loaded(force: bool = False) -> bool:
+def ensure_chroma_loaded(force: bool = False, scrape_live: bool = False) -> bool:
     try:
-        return load_faculty_data(rebuild=force)
+        return load_faculty_data(rebuild=force, scrape_live=scrape_live)
     except Exception as e:
         print(f"Warning: ensure_chroma_loaded error: {e}")
         return False
@@ -143,3 +167,4 @@ def ensure_chroma_loaded(force: bool = False) -> bool:
 if __name__ == "__main__":
     reloaded = load_faculty_data(rebuild=True)
     print("Faculty profiles process completed!")
+

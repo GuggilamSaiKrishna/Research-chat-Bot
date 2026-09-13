@@ -20,3 +20,7 @@ def get_google_api_key() -> str | None:
 
 def get_tavily_api_key() -> str | None:
     return _secret("TAVILY_API_KEY")
+
+
+COLLEGE_DOMAIN = os.getenv("COLLEGE_DOMAIN", "vignan.ac.in")
+

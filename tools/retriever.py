@@ -59,30 +59,31 @@ def fallback_retrieve_faculty(query: str, k: int = 5):
         research_areas = prof.get("research_areas", [])
         publications = prof.get("publications", [])
 
-        # STRICT: Only match faculty who have publications
-        if not publications:
+        # Match faculty who have publications or research areas
+        if not publications and not research_areas:
             continue
 
         matching_pubs_scored = []
-        for pub in publications:
-            pub_lower = pub.lower()
-            pub_tokens = set(re.findall(r"\w+", pub_lower))
+        if publications:
+            for pub in publications:
+                pub_lower = pub.lower()
+                pub_tokens = set(re.findall(r"\w+", pub_lower))
 
-            if clean_query and (clean_query == pub_lower or clean_query in pub_lower):
-                pub_score = 100.0
-            elif significant_query_tokens and pub_tokens:
-                common = significant_query_tokens.intersection(pub_tokens)
-                if common:
-                    pub_score = round(min(95.0, (len(common) / len(significant_query_tokens)) * 90.0), 2)
+                if clean_query and (clean_query == pub_lower or clean_query in pub_lower):
+                    pub_score = 100.0
+                elif significant_query_tokens and pub_tokens:
+                    common = significant_query_tokens.intersection(pub_tokens)
+                    if common:
+                        pub_score = round(min(95.0, (len(common) / len(significant_query_tokens)) * 90.0), 2)
+                    else:
+                        pub_score = 0.0
                 else:
                     pub_score = 0.0
-            else:
-                pub_score = 0.0
 
-            if pub_score > 0:
-                matching_pubs_scored.append((pub, pub_score))
+                if pub_score > 0:
+                    matching_pubs_scored.append((pub, pub_score))
 
-        # Check match against research areas if no direct pub title match
+        # Check match against research areas
         research_text = " ".join(research_areas).lower()
         research_tokens = set(re.findall(r"\w+", research_text))
         area_common = significant_query_tokens.intersection(research_tokens) if significant_query_tokens else set()
@@ -92,17 +93,11 @@ def fallback_retrieve_faculty(query: str, k: int = 5):
             matched_pubs = [p[0] for p in matching_pubs_scored[:2]]
             best_score = matching_pubs_scored[0][1]
         elif area_common:
-            # Query matches research area: pick top relevant publications that overlap with research/query tokens
-            pub_scores = []
-            for pub in publications:
-                p_tokens = set(re.findall(r"\w+", pub.lower()))
-                overlap = len(p_tokens.intersection(research_tokens.union(significant_query_tokens)))
-                pub_scores.append((pub, overlap))
-            pub_scores.sort(key=lambda x: x[1], reverse=True)
-            matched_pubs = [p[0] for p in pub_scores[:2]]  # Top 2 relevant
-            best_score = round(min(85.0, (len(area_common) / len(significant_query_tokens)) * 80.0), 2) if significant_query_tokens else 70.0
+            matched_pubs = publications[:2] if publications else []
+            best_score = round(min(85.0, (len(area_common) / max(1, len(significant_query_tokens))) * 80.0), 2) if significant_query_tokens else 70.0
         else:
             continue
+
 
         full_profile = f"""Name: {name}
 Department: {department}

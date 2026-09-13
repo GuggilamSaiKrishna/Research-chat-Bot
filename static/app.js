@@ -148,10 +148,21 @@ function renderStudentResults(data) {
                 </div>
             `;
         } else {
+            const junkKeywords = ["file:/", "http:/", "https:/", ".pdf", ".doc", "downloads/", "h index", "i-10", "citations", "ph.d", "sanctioned", "rs.", "patent", "dst-seed", "a.p."];
+            const isJunkTag = (t) => {
+                const l = t.toLowerCase();
+                return junkKeywords.some(k => l.includes(k)) || /^\d+(\s*(rs|publications|phd|citations))?$/i.test(l) || t.length > 80;
+            };
+
             matches.forEach(faculty => {
                 const pubs = faculty.publications && faculty.publications !== 'N/A' ? faculty.publications : 'None listed';
                 const mobile = faculty.mobile_number && faculty.mobile_number !== 'N/A' ? faculty.mobile_number : null;
-                const areas = faculty.research_areas ? faculty.research_areas.split(',').map(a => `<span class="tag">${a.trim()}</span>`).join(' ') : '';
+                const areaList = faculty.research_areas
+                    ? faculty.research_areas.split(',')
+                        .map(a => a.trim())
+                        .filter(a => a.length > 2 && !isJunkTag(a))
+                    : [];
+                const areas = areaList.map(a => `<span class="tag">${a}</span>`).join(' ');
 
                 html += `
                     <div class="faculty-card">
@@ -165,7 +176,7 @@ function renderStudentResults(data) {
                         </div>
                         <div style="margin-bottom: 10px;">
                             <span class="info-label">Research Areas:</span>
-                            <div class="tag-list">${areas}</div>
+                            <div class="tag-list">${areas || '<span style="color:#666;font-size:0.9em;">General Research</span>'}</div>
                         </div>
                         <div class="pubs-box">
                             <strong>Matching Publications:</strong> ${pubs}
@@ -173,6 +184,7 @@ function renderStudentResults(data) {
                     </div>
                 `;
             });
+
         }
 
         if (route === 'project' && data.project_suggestions) {

@@ -48,11 +48,12 @@ def web_search_node(state: StudentState) -> StudentState:
     search_result = web_search(state["query"])
 
     prompt = f"""
-You are a research assistant.
+You are an official college research assistant for Vignan University.
 
-Answer using the web search results below.
+Answer the user's question clearly and accurately based on the college website search results below.
+Include relevant URLs/links from the results whenever applicable so users can visit the college website directly.
 
-Web Results:
+College Web Search Results:
 {search_result}
 
 Question:
@@ -65,6 +66,7 @@ Question:
     )
 
     return {"response": response.text}
+
 
 
 def faculty_retrieve_node(state: StudentState) -> StudentState:
