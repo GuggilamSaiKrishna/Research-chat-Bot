@@ -98,26 +98,13 @@ def chroma_is_up_to_date() -> bool:
         return False
 
     stored_hash = HASH_FILE.read_text(encoding="utf-8").strip()
-    if stored_hash != _get_data_hash():
-        return False
-
-    try:
-        embeddings = GoogleGenerativeAIEmbeddings(
-            model="gemini-embedding-001",
-            google_api_key=get_google_api_key(),
-        )
-        import chromadb
-        client = chromadb.PersistentClient(path=CHROMA_DIR)
-        db = Chroma(client=client, collection_name="langchain", embedding_function=embeddings)
-        return db._collection.count() > 0
-    except Exception:
-        return False
+    return stored_hash == _get_data_hash()
 
 
 def load_faculty_data(rebuild: bool = False, scrape_live: bool = False) -> bool:
     if scrape_live or not Path(FACULTY_JSON).exists():
         print("Scraping live faculty profiles directly from https://vignan.ac.in/newvignan/people.php...")
-        scrape_vignan_people(max_workers=25)
+        scrape_vignan_people(max_workers=5)
 
     current_hash = _get_data_hash()
 

@@ -10,22 +10,37 @@ from config import CHROMA_DIR, FACULTY_JSON, get_google_api_key
 from tools.load_data import ensure_chroma_loaded
 
 
+_cached_db = None
+_cached_embeddings = None
+_cached_client = None
+
+def reset_db_cache():
+    global _cached_db, _cached_embeddings, _cached_client
+    _cached_db = None
+    _cached_embeddings = None
+    _cached_client = None
+
+
 def get_db() -> Chroma | None:
+    global _cached_db, _cached_embeddings, _cached_client
+    if _cached_db is not None:
+        return _cached_db
     try:
         ensure_chroma_loaded()
         api_key = get_google_api_key()
         if not api_key:
             return None
-        embeddings = GoogleGenerativeAIEmbeddings(
+        _cached_embeddings = GoogleGenerativeAIEmbeddings(
             model="gemini-embedding-001",
             google_api_key=api_key,
         )
-        client = chromadb.PersistentClient(path=CHROMA_DIR)
-        return Chroma(
-            client=client,
+        _cached_client = chromadb.PersistentClient(path=CHROMA_DIR)
+        _cached_db = Chroma(
+            client=_cached_client,
             collection_name="langchain",
-            embedding_function=embeddings,
+            embedding_function=_cached_embeddings,
         )
+        return _cached_db
     except Exception as e:
         print(f"Warning: Could not connect to Chroma DB: {e}")
         return None

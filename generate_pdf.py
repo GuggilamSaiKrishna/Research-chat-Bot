@@ -33,7 +33,7 @@ class NumberedCanvas(canvas.Canvas):
         
         # Header (pages > 1)
         if self._pageNumber > 1:
-            self.drawString(54, 750, "Research Matching Chatbot System Architecture & Technical Manual")
+            self.drawString(54, 750, "Vignan Research Matching System — Technical Architecture & Workflow Manual")
             self.setStrokeColor(colors.HexColor("#CBD5E1"))
             self.setLineWidth(0.5)
             self.line(54, 742, 558, 742)
@@ -41,7 +41,7 @@ class NumberedCanvas(canvas.Canvas):
         # Footer
         page_str = f"Page {self._pageNumber} of {page_count}"
         self.drawRightString(558, 36, page_str)
-        self.drawString(54, 36, "CONFIDENTIAL & PROPRIETARY — HACKATHON DOCUMENTATION")
+        self.drawString(54, 36, "VIGNAN UNIVERSITY — RESEARCH MATCHING CHATBOT DOCUMENTATION")
         self.setStrokeColor(colors.HexColor("#CBD5E1"))
         self.setLineWidth(0.5)
         self.line(54, 48, 558, 48)
@@ -60,24 +60,20 @@ def create_pdf(filename="Research_Matching_Chatbot_Explanation.pdf"):
         bottomMargin=54
     )
 
+    PRIMARY = colors.HexColor("#1E3A8A")     # Navy Blue
+    SECONDARY = colors.HexColor("#0D9488")   # Teal
+    DARK_TEXT = colors.HexColor("#0F172A")   # Slate 900
+    BORDER_COLOR = colors.HexColor("#E2E8F0")
+    BG_LIGHT = colors.HexColor("#F8FAFC")
+
     styles = getSampleStyleSheet()
 
-    # Custom Color Palette
-    PRIMARY = colors.HexColor("#1E1B4B")      # Deep Indigo / Navy
-    SECONDARY = colors.HexColor("#0284C7")    # Bright Ocean Blue
-    ACCENT = colors.HexColor("#0D9488")       # Teal Accent
-    DARK_TEXT = colors.HexColor("#1E293B")    # Slate 800
-    MUTED_TEXT = colors.HexColor("#475569")   # Slate 600
-    BG_LIGHT = colors.HexColor("#F8FAFC")     # Light background
-    BORDER_COLOR = colors.HexColor("#E2E8F0")
-
-    # Typography Styles
     title_style = ParagraphStyle(
         'DocTitle',
-        parent=styles['Heading1'],
+        parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=24,
-        leading=28,
+        fontSize=22,
+        leading=26,
         textColor=PRIMARY,
         spaceAfter=6
     )
@@ -86,33 +82,33 @@ def create_pdf(filename="Research_Matching_Chatbot_Explanation.pdf"):
         'DocSubtitle',
         parent=styles['Normal'],
         fontName='Helvetica',
-        fontSize=12,
-        leading=16,
-        textColor=SECONDARY,
-        spaceAfter=15
+        fontSize=11,
+        leading=15,
+        textColor=colors.HexColor("#475569"),
+        spaceAfter=12
     )
 
     h1_style = ParagraphStyle(
         'Heading1_Custom',
-        parent=styles['Heading2'],
+        parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=15,
+        fontSize=14,
         leading=18,
         textColor=PRIMARY,
         spaceBefore=14,
-        spaceAfter=8,
+        spaceAfter=6,
         keepWithNext=True
     )
 
     h2_style = ParagraphStyle(
         'Heading2_Custom',
-        parent=styles['Heading3'],
+        parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=12,
+        fontSize=11,
         leading=15,
         textColor=SECONDARY,
         spaceBefore=10,
-        spaceAfter=6,
+        spaceAfter=4,
         keepWithNext=True
     )
 
@@ -120,7 +116,7 @@ def create_pdf(filename="Research_Matching_Chatbot_Explanation.pdf"):
         'Body_Custom',
         parent=styles['Normal'],
         fontName='Helvetica',
-        fontSize=10,
+        fontSize=9.5,
         leading=14,
         textColor=DARK_TEXT,
         spaceAfter=6
@@ -129,21 +125,20 @@ def create_pdf(filename="Research_Matching_Chatbot_Explanation.pdf"):
     bullet_style = ParagraphStyle(
         'Bullet_Custom',
         parent=body_style,
-        leftIndent=15,
-        firstLineIndent=-10,
+        leftIndent=12,
         spaceAfter=4
     )
 
     code_style = ParagraphStyle(
         'Code_Custom',
-        parent=body_style,
+        parent=styles['Normal'],
         fontName='Courier',
-        fontSize=9,
-        leading=12,
+        fontSize=8.5,
+        leading=11,
         textColor=colors.HexColor("#0F172A"),
-        backColor=BG_LIGHT,
-        borderColor=BORDER_COLOR,
-        borderWidth=1,
+        backColor=colors.HexColor("#F1F5F9"),
+        borderColor=colors.HexColor("#CBD5E1"),
+        borderWidth=0.5,
         borderPadding=6,
         spaceBefore=4,
         spaceAfter=6
@@ -167,192 +162,187 @@ def create_pdf(filename="Research_Matching_Chatbot_Explanation.pdf"):
     story = []
 
     # Title Banner
-    story.append(Paragraph("Research Matching Chatbot System", title_style))
-    story.append(Paragraph("Comprehensive Technical Architecture, Workflow & System Explanation Document", subtitle_style))
-    story.append(HRFlowable(width="100%", thickness=2, color=PRIMARY, spaceAfter=15))
+    story.append(Paragraph("Vignan Research Matching Chatbot", title_style))
+    story.append(Paragraph("Complete Technical Architecture, Methods, Technologies & Operational Manual", subtitle_style))
+    story.append(HRFlowable(width="100%", thickness=2, color=PRIMARY, spaceAfter=12))
 
     # Executive Summary Box
     summary_text = (
-        "<b>Executive Summary:</b> The Research Matching Chatbot is an AI-driven, multi-agent academic platform "
-        "built using <b>LangGraph</b>, <b>Google Gemini 2.5 Flash LLM</b>, and <b>Chroma Vector DB</b>. "
-        "It acts as a dynamic bridge between students and academic faculty members, providing tailored faculty recommendations "
-        "via Retrieval-Augmented Generation (RAG), automated research project ideation, interdisciplinary faculty collaboration "
-        "analysis, live web research trend lookup, and professor-oriented strategic research synthesis."
+        "<b>Executive Summary:</b> The Vignan Research Matching Chatbot is an intelligent academic platform "
+        "powered by <b>LangGraph</b> stateful orchestration, <b>Google Gemini 2.5 Flash LLM</b>, <b>Chroma Vector DB</b>, "
+        "<b>BeautifulSoup4 Multithreaded Web Scraper</b>, and <b>Tavily Site-Specific Web Search</b>. "
+        "It connects directly to the official Vignan University faculty portal (<code>vignan.ac.in/newvignan/people.php</code>) "
+        "to extract, sanitize, vector-index, and retrieve research expertise across <b>717 faculty members</b>."
     )
     story.append(Paragraph(summary_text, callout_style))
-    story.append(Spacer(1, 10))
+    story.append(Spacer(1, 8))
 
-    # Section 1: System Overview & Dual-Role Paradigm
-    story.append(Paragraph("1. System Overview & Operational Roles", h1_style))
-    story.append(Paragraph(
-        "The platform operates under two primary user modes tailored for academic ecosystems:",
-        body_style
-    ))
+    # Section 1: Technologies & Frameworks Stack
+    story.append(Paragraph("1. Technologies & Frameworks Stack", h1_style))
+    story.append(Paragraph("The platform is engineered using modern, production-grade AI & web technologies:", body_style))
 
-    roles_data = [
+    tech_table_data = [
+        [Paragraph("<b>Layer / Domain</b>", body_style), Paragraph("<b>Technologies Used</b>", body_style), Paragraph("<b>Purpose & Functionality</b>", body_style)],
         [
-            Paragraph("<b>User Role</b>", body_style),
-            Paragraph("<b>Core Capabilities</b>", body_style),
-            Paragraph("<b>Underlying Mechanism</b>", body_style)
+            Paragraph("<b>Agent Orchestration</b>", body_style),
+            Paragraph("LangGraph 0.2+, LangChain Core", body_style),
+            Paragraph("Stateful multi-route agent state graph (<code>StateGraph</code>, <code>TypedDict</code>) for intent classification and decision routing.", body_style)
         ],
         [
-            Paragraph("<b>Student Mode</b>", body_style),
-            Paragraph("• Faculty RAG Matching<br/>• Project Ideation<br/>• Collaboration Discovery<br/>• Latest Research Web Search", body_style),
-            Paragraph("LangGraph State Router (4 routes: <code>faculty_rag</code>, <code>project</code>, <code>collaboration</code>, <code>web_search</code>) connected to Chroma DB and Tavily Search.", body_style)
+            Paragraph("<b>Large Language Model</b>", body_style),
+            Paragraph("Google Gemini 2.5 Flash<br/>(<code>gemini-2.5-flash</code>)", body_style),
+            Paragraph("Advanced reasoning for project ideation, interdisciplinary synthesis, and web research summarization.", body_style)
         ],
         [
-            Paragraph("<b>Professor Mode</b>", body_style),
-            Paragraph("• Current Research Trends<br/>• Recent Advancements<br/>• Future Research Directions", body_style),
-            Paragraph("Direct structured prompt synthesis via Gemini 2.5 Flash delivering structured, high-level research analysis.", body_style)
+            Paragraph("<b>Vector Store & RAG</b>", body_style),
+            Paragraph("Chroma DB, Google Embeddings<br/>(<code>gemini-embedding-001</code>)", body_style),
+            Paragraph("High-dimensional similarity indexing and hybrid tokenized fallback retrieval engine.", body_style)
+        ],
+        [
+            Paragraph("<b>Live Web Scraper</b>", body_style),
+            Paragraph("BeautifulSoup4, Requests,<br/>ThreadPoolExecutor", body_style),
+            Paragraph("Concurrent scraping of 717 faculty cards & profile details from <code>vignan.ac.in/newvignan/people.php</code>.", body_style)
+        ],
+        [
+            Paragraph("<b>Web Search Engine</b>", body_style),
+            Paragraph("Tavily Search API<br/>(<code>tavily-python</code>)", body_style),
+            Paragraph("Domain-restricted live web search (<code>site:vignan.ac.in</code>) for news, events, and department updates.", body_style)
+        ],
+        [
+            Paragraph("<b>Backend Web Server</b>", body_style),
+            Paragraph("FastAPI, Uvicorn, Pydantic,<br/>Python-Dotenv", body_style),
+            Paragraph("Asynchronous REST API endpoints (<code>/api/student</code>, <code>/api/professor</code>, <code>/api/reload</code>).", body_style)
+        ],
+        [
+            Paragraph("<b>Frontend Web UI</b>", body_style),
+            Paragraph("HTML5, CSS3, JavaScript<br/>(Fetch API, DOM manipulation)", body_style),
+            Paragraph("Responsive dual-mode Web UI with client-side tag guards, toast alerts, and instant card rendering.", body_style)
+        ],
+        [
+            Paragraph("<b>Cloud Deployment</b>", body_style),
+            Paragraph("GitHub, Render Cloud Web Service<br/>(<code>render.yaml</code>, <code>Procfile</code>)", body_style),
+            Paragraph("Automated CI/CD deployment pipeline triggering on push to <code>origin/main</code>.", body_style)
         ]
     ]
 
-    t_roles = Table(roles_data, colWidths=[110, 200, 194])
-    t_roles.setStyle(TableStyle([
+    t_tech = Table(tech_table_data, colWidths=[110, 150, 244])
+    t_tech.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), PRIMARY),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
-        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
-        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, BG_LIGHT]),
-        ('TOPPADDING', (0, 0), (-1, -1), 6),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
-    ]))
-    story.append(t_roles)
-    story.append(Spacer(1, 12))
-
-    # Section 2: LangGraph Orchestration Engine
-    story.append(Paragraph("2. LangGraph Stateful Workflow Engine", h1_style))
-    story.append(Paragraph(
-        "At the core of the Student Mode execution is a <b>LangGraph StateGraph</b> router (defined in <code>graph/student_graph.py</code>). "
-        "Unlike basic chain-based LLM calls, LangGraph maintains a state dictionary (<code>StudentState</code>) and evaluates intent dynamically.",
-        body_style
-    ))
-
-    story.append(Paragraph("<b>State Schema Definition (<code>StudentState</code>):</b>", h2_style))
-    code_state = """class StudentState(TypedDict):
-    query: str       # Original prompt entered by the student
-    route: str       # Target route determined by classifier
-    response: str    # Generated final text response or synthesis
-    matches: list    # List of retrieved matching faculty dictionaries
-    context: str     # Formatted text context of top faculty profiles"""
-    story.append(Paragraph(code_state.replace("\n", "<br/>").replace(" ", "&nbsp;"), code_style))
-
-    story.append(Paragraph("<b>Graph Nodes & Routing Logic:</b>", h2_style))
-    story.append(Paragraph("• <b>START → Classify Node:</b> Analyzes incoming query string keywords to set <code>route</code> flag.", bullet_style))
-    story.append(Paragraph("• <b>Conditional Edge (<code>route_query</code>):</b> Directs state execution based on route classification:", bullet_style))
-    story.append(Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;1. <code>collaboration</code> → Executes <code>collaboration_node</code> (Finds top 2 faculty pairs).", bullet_style))
-    story.append(Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;2. <code>web_search</code> → Executes <code>web_search_node</code> (Invokes Tavily API + Gemini synthesis).", bullet_style))
-    story.append(Paragraph("&nbsp;&nbsp;&nbsp;&nbsp;3. <code>project</code> or <code>faculty_rag</code> → Executes <code>faculty_retrieve_node</code> (Chroma DB similarity search).", bullet_style))
-
-    graph_flow_data = [
-        [Paragraph("<b>Intent Classifier Keyword Rule</b>", body_style), Paragraph("<b>Target Route</b>", body_style), Paragraph("<b>Execution Flow & Output</b>", body_style)],
-        [Paragraph("Contains <code>'collaboration'</code>", body_style), Paragraph("<code>collaboration</code>", body_style), Paragraph("Retrieves top 2 faculty profiles and crafts interdisciplinary synergy reasoning.", body_style)],
-        [Paragraph("Contains <code>'latest'</code> or <code>'trend'</code>", body_style), Paragraph("<code>web_search</code>", body_style), Paragraph("Queries Tavily search API for real-time web results and synthesizes summary.", body_style)],
-        [Paragraph("Contains <code>'project'</code>", body_style), Paragraph("<code>project</code>", body_style), Paragraph("Retrieves faculty matches and generates 3 detailed project ideas with difficulty ratings.", body_style)],
-        [Paragraph("Default query", body_style), Paragraph("<code>faculty_rag</code>", body_style), Paragraph("Performs Chroma DB RAG search and outputs matched faculty with similarity score.", body_style)],
-    ]
-    t_graph = Table(graph_flow_data, colWidths=[140, 100, 264])
-    t_graph.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), SECONDARY),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
         ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
         ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, BG_LIGHT]),
         ('TOPPADDING', (0, 0), (-1, -1), 5),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
     ]))
-    story.append(t_graph)
-    story.append(Spacer(1, 14))
+    story.append(t_tech)
+    story.append(Spacer(1, 10))
 
-    # Section 3: Data Vectorization & Hybrid RAG Infrastructure
-    story.append(Paragraph("3. Vector Database & RAG Infrastructure", h1_style))
+    # Section 2: Detailed End-to-End System Working & Methods
+    story.append(Paragraph("2. Detailed System Working & Core Methods", h1_style))
+    
+    story.append(Paragraph("<b>Method 1: Live Faculty Web Scraping & Data Sanitization Pipeline</b>", h2_style))
     story.append(Paragraph(
-        "Faculty profiles stored in <code>data/faculty_profiles/faculty.json</code> are converted into vector embeddings "
-        "using Google's <b>gemini-embedding-001</b> model and persisted locally in <b>Chroma DB</b>.",
+        "Faculty profiles are fetched dynamically from the official portal via <code>tools/scrape_vignan_people.py</code>. "
+        "The script extracts card IDs from <code>people.php</code> and executes multithreaded POST calls to <code>getfaculty.php</code>. "
+        "A rigorous multi-stage cleaning pipeline processes raw text:",
+        body_style
+    ))
+    story.append(Paragraph("• <b>File Path & PDF Removal:</b> Excludes local links (e.g. <code>file:///C:/Users/Admin/Downloads/...</code>) and document extensions.", bullet_style))
+    story.append(Paragraph("• <b>Administrative Metrics Filtering:</b> Regex filters strip out noisy tags such as <code>h-index</code>, <code>i-10 index</code>, <code>citations</code>, <code>Ph.D awarded</code>, <code>A.P. Sanctioned</code>, <code>890 Rs.</code>, and publication count numbers.", bullet_style))
+    story.append(Paragraph("• <b>Patent & Publication Reclassification:</b> Long titles or strings starting with <i>Patent:</i> are automatically reclassified under <code>publications</code>, keeping <code>research_areas</code> clean and focused.", bullet_style))
+
+    story.append(Spacer(1, 4))
+    story.append(Paragraph("<b>Method 2: LangGraph Stateful Decision Router</b>", h2_style))
+    story.append(Paragraph(
+        "Student queries are handled by a stateful graph router in <code>graph/student_graph.py</code> using a <code>StudentState</code> dict. "
+        "The graph evaluates query intent dynamically and routes execution into one of 4 distinct nodes:",
         body_style
     ))
 
-    story.append(Paragraph("<b>Key Engineering Architectural Highlights:</b>", h2_style))
-    story.append(Paragraph("• <b>SHA-256 Cache Syncing:</b> A <code>.data_hash</code> file stores the SHA-256 hash of <code>faculty.json</code>. Database re-indexing is triggered automatically only when data modification is detected.", bullet_style))
-    story.append(Paragraph("• <b>Strict Publication Filtering Rule:</b> Only faculty members with listed publications are indexed into the vector store, ensuring high accuracy academic retrieval.", bullet_style))
-    story.append(Paragraph("• <b>Similarity Score Normalization:</b> Distance scores returned by Chroma vector similarity searches are converted into percentage match metrics using the formula:<br/>"
-                           "&nbsp;&nbsp;&nbsp;&nbsp;<code>Cosine Similarity % = max(0.0, 1.0 - (Score / 2.0)) * 100</code>", bullet_style))
-    story.append(Paragraph("• <b>Robust Hybrid Fallback Engine:</b> If vector DB loading or embedding API is unavailable, <code>retriever.py</code> gracefully falls back to an in-memory tokenized keyword matching engine across faculty profiles and publications.", bullet_style))
+    routes_data = [
+        [Paragraph("<b>Graph Node</b>", body_style), Paragraph("<b>Condition / Trigger Keyword</b>", body_style), Paragraph("<b>Operational Method</b>", body_style)],
+        [
+            Paragraph("<code>faculty_rag</code>", body_style),
+            Paragraph("Default student query", body_style),
+            Paragraph("Queries Chroma vector DB & fallback retriever to return matching faculty cards with percentage scores.", body_style)
+        ],
+        [
+            Paragraph("<code>project</code>", body_style),
+            Paragraph("Contains <code>'project'</code>", body_style),
+            Paragraph("Retrieves faculty context and invokes Gemini 2.5 Flash to propose 3 tailored research project proposals.", body_style)
+        ],
+        [
+            Paragraph("<code>collaboration</code>", body_style),
+            Paragraph("Contains <code>'collaboration'</code>", body_style),
+            Paragraph("Analyzes research intersections between top matching professors to craft interdisciplinary proposals.", body_style)
+        ],
+        [
+            Paragraph("<code>web_search</code>", body_style),
+            Paragraph("Contains <code>'latest'</code> or <code>'trend'</code>", body_style),
+            Paragraph("Queries Tavily Search restricted to <code>site:vignan.ac.in</code> and synthesizes answer with live web links.", body_style)
+        ]
+    ]
+
+    t_routes = Table(routes_data, colWidths=[100, 150, 254])
+    t_routes.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), SECONDARY),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, BG_LIGHT]),
+        ('TOPPADDING', (0, 0), (-1, -1), 4),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+    ]))
+    story.append(t_routes)
+    story.append(Spacer(1, 6))
+
+    story.append(Paragraph("<b>Method 3: Hybrid Retrieval & Scoring Formula</b>", h2_style))
+    story.append(Paragraph(
+        "Faculty matching combines high-dimensional vector search with a token-weighted fallback engine in <code>tools/retriever.py</code>. "
+        "Similarity distance scores from Chroma DB are converted to human-readable percentages via:",
+        body_style
+    ))
+    story.append(Paragraph("<code>Cosine Similarity % = max(0.0, 1.0 - (Distance_Score / 2.0)) * 100</code>", code_style))
+
+    story.append(Spacer(1, 8))
+
+    # Section 3: Project Directory Structure
+    story.append(Paragraph("3. Complete Project Structure", h1_style))
+    dir_str = """sai2/
+├── app.py                         # CLI launcher (Student/Professor selection)
+├── server.py                      # FastAPI web server (port 8050)
+├── config.py                      # Environment loader & domain settings
+├── Procfile & render.yaml         # Cloud deployment specifications
+├── requirements.txt               # Dependencies list (fastapi, langgraph, bs4, etc.)
+├── generate_pdf.py                # PDF documentation builder
+├── data/
+│   └── faculty_profiles/
+│       └── faculty.json           # Sanitized dataset of 717 faculty members
+├── graph/
+│   └── student_graph.py           # LangGraph state machine & decision router
+├── research_agents/
+│   ├── student_agent.py           # Student graph runner
+│   └── professor_agent.py         # Strategic research analysis agent
+├── static/
+│   ├── index.html                 # Responsive Web UI landing page
+│   ├── app.js                     # Frontend API client & tag filters
+│   └── style.css                  # UI styling & animations
+└── tools/
+    ├── scrape_vignan_people.py    # Multithreaded live website scraper
+    ├── load_data.py               # Vector DB preprocessor & indexer
+    ├── retriever.py               # Hybrid vector & fallback retriever
+    ├── collaboration.py           # Interdisciplinary match tool
+    ├── project_suggester.py       # Gemini project ideation engine
+    └── tavily_search.py           # College-domain restricted Tavily web search"""
+    story.append(Paragraph(dir_str.replace("\n", "<br/>").replace(" ", "&nbsp;"), code_style))
 
     story.append(Spacer(1, 10))
 
-    # Section 4: Deep Dive into Tool Modules
-    story.append(Paragraph("4. Tool Modules & Agent Extensions", h1_style))
-
-    tools_info = [
-        ("tools/load_data.py", "Handles Chroma DB initialization, SHA-256 hash tracking, JSON document transformation, and embedding indexing with gemini-embedding-001."),
-        ("tools/retriever.py", "Performs vector similarity search against Chroma DB with exact publication keyword boost and fallback tokenized matching."),
-        ("tools/project_suggester.py", "Uses Gemini 2.5 Flash to generate 3 customized project ideas, difficulty levels, required skills, and expected outcomes based on matched faculty context."),
-        ("tools/collaboration.py", "Analyzes research intersections between top matching professors to propose collaborative interdisciplinary research initiatives."),
-        ("tools/tavily_search.py", "Integrates Tavily Web Search API to fetch live external web context for queries regarding breaking research news and latest industry trends."),
-        ("research_agents/professor_agent.py", "Dedicated agent module for professors that synthesizes current trends, recent advances, and future research directions.")
-    ]
-
-    for tool_name, tool_desc in tools_info:
-        story.append(Paragraph(f"• <b><code>{tool_name}</code></b>: {tool_desc}", bullet_style))
-
-    story.append(Spacer(1, 12))
-
-    # Section 5: Streamlit Web UI Architecture
-    story.append(Paragraph("5. User Interface & Streamlit Web Layer", h1_style))
-    story.append(Paragraph(
-        "The application features a modern Streamlit user interface (<code>streamlit_app.py</code>) designed for usability:",
-        body_style
-    ))
-    story.append(Paragraph("• <b>Dual-Role Landing Screen:</b> Interactive selection between <i>Student Mode</i> and <i>Professor Mode</i>.", bullet_style))
-    story.append(Paragraph("• <b>Dynamic Sidebar Controls:</b> Provides role indicator, role switcher, chat clearing, quick examples, and a manual <i>🔄 Reload / Sync Data</i> button to force vector index rebuilds.", bullet_style))
-    story.append(Paragraph("• <b>Formatted Match Output:</b> Displays faculty cards with percentage match indicators, department, mobile contact info, research topics, and publications.", bullet_style))
-    story.append(Paragraph("• <b>Quick Prompt Chips:</b> Enables single-click prompt insertion for standard student and professor queries.", bullet_style))
-
-    story.append(Spacer(1, 12))
-
-    # Section 6: File & Directory Directory Structure
-    story.append(Paragraph("6. Project Directory Map", h1_style))
-    dir_structure = """sai2/
-├── app.py                    # Command-line interface (CLI) launcher
-├── streamlit_app.py          # Web GUI application (Streamlit)
-├── config.py                 # Environment & API Key loader (.env)
-├── requirements.txt          # Dependencies list
-├── data/
-│   └── faculty_profiles/
-│       └── faculty.json      # Structured JSON database of faculty members
-├── graph/
-│   └── student_graph.py      # LangGraph state graph definition & router
-├── research_agents/
-│   ├── student_agent.py      # Student query handler & graph runner
-│   └── professor_agent.py    # Professor research query processor
-├── tools/
-│   ├── load_data.py          # Data preprocessor & Chroma DB loader
-│   ├── retriever.py          # Hybrid RAG retriever engine
-│   ├── collaboration.py      # Faculty collaboration match tool
-│   ├── project_suggester.py  # Gemini project ideation engine
-│   ├── rag.py                # Standalone RAG CLI demo script
-│   └── tavily_search.py      # Tavily live web search API client
-└── chroma_db/                # Local persistent Chroma vector store"""
-    story.append(Paragraph(dir_structure.replace("\n", "<br/>").replace(" ", "&nbsp;"), code_style))
-
-    story.append(Spacer(1, 14))
-
-    # Section 7: Verification & Quickstart
-    story.append(Paragraph("7. Setup, Environment & Execution Guide", h1_style))
-    story.append(Paragraph("<b>1. Environment Configuration (<code>.env</code>):</b>", h2_style))
-    env_code = """GOOGLE_API_KEY=your_gemini_api_key_here
-TAVILY_API_KEY=your_tavily_api_key_here"""
-    story.append(Paragraph(env_code.replace("\n", "<br/>").replace(" ", "&nbsp;"), code_style))
-
-    story.append(Paragraph("<b>2. Run Streamlit Application:</b>", h2_style))
-    story.append(Paragraph("<code>streamlit run streamlit_app.py</code>", code_style))
-
-    story.append(Paragraph("<b>3. Run Command-Line Chatbot Interface:</b>", h2_style))
-    story.append(Paragraph("<code>py app.py</code>", code_style))
-
-    story.append(Paragraph("<b>4. Rebuild Vector Index manually:</b>", h2_style))
-    story.append(Paragraph("<code>py tools/load_data.py</code>", code_style))
+    # Section 4: Execution & Setup Instructions
+    story.append(Paragraph("4. Execution & Setup Instructions", h1_style))
+    story.append(Paragraph("<b>1. Start Web Server:</b> <code>py server.py</code> $\\rightarrow$ Open <code>http://localhost:8050</code>", bullet_style))
+    story.append(Paragraph("<b>2. Run Live Scraper:</b> <code>py tools/scrape_vignan_people.py</code>", bullet_style))
+    story.append(Paragraph("<b>3. Run Command-Line Interface:</b> <code>py app.py</code>", bullet_style))
+    story.append(Paragraph("<b>4. Render Cloud Deployment:</b> Automated on <code>git push origin main</code> to <code>GuggilamSaiKrishna/Research-chat-Bot</code>.", bullet_style))
 
     doc.build(story, canvasmaker=NumberedCanvas)
     print(f"PDF successfully generated at: {pdf_path}")

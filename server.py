@@ -36,7 +36,9 @@ def handle_professor(req: QueryRequest):
 
 @app.post("/api/reload")
 def reload_data():
+    from tools.retriever import reset_db_cache
     ensure_chroma_loaded(force=True)
+    reset_db_cache()
     return {"status": "success", "message": "Vector database reloaded successfully"}
 
 # Serve static files
