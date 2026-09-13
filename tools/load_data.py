@@ -128,13 +128,37 @@ def load_faculty_data(rebuild: bool = False, scrape_live: bool = False) -> bool:
             except Exception:
                 pass
 
-            Chroma.from_documents(
-                documents=documents,
-                embedding=embeddings,
+            vector_db = Chroma(
                 client=client,
                 collection_name="langchain",
+                embedding_function=embeddings,
             )
+
+            batch_size = 20
+            total_docs = len(documents)
+            print(f"Embedding {total_docs} documents into Chroma in batches of {batch_size}...")
+
+            for i in range(0, total_docs, batch_size):
+                batch = documents[i : i + batch_size]
+                retries = 0
+                while retries < 5:
+                    try:
+                        vector_db.add_documents(batch)
+                        print(f"Embedded batch {i // batch_size + 1}/{(total_docs + batch_size - 1) // batch_size}")
+                        break
+                    except Exception as err:
+                        err_str = str(err)
+                        if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                            retries += 1
+                            wait = 35 if retries == 1 else (40 * retries)
+                            print(f"Gemini API rate limit (429) hit. Waiting {wait} seconds before retrying batch...")
+                            time.sleep(wait)
+                        else:
+                            raise err
+                time.sleep(1.5)
+
             HASH_FILE.write_text(current_hash, encoding="utf-8")
+            print("Chroma DB embedding indexing completed successfully!")
             return True
         except Exception as e:
             print(f"Warning: Chroma vector DB loading failed ({e}). Fallback search will be used.")
