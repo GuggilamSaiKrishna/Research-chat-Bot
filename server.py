@@ -56,4 +56,5 @@ if __name__ == "__main__":
     print("  Starting Vignan Research Matching Chatbot Server")
     print("  Open in browser: http://localhost:8050")
     print("=======================================================\n")
-    uvicorn.run("server:app", host="0.0.0.0", port=8050, reload=True)
+    port = int(os.getenv("PORT", 8050))
+    uvicorn.run("server:app", host="0.0.0.0", port=port)
