@@ -9,4 +9,5 @@ tavily-python
 uvicorn
 beautifulsoup4
 requests
+gradio
 

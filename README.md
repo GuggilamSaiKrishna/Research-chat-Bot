@@ -1,14 +1,17 @@
-The Only Major Thing Left: LangGraph
+---
+title: Vignan Research Matching Chatbot
+emoji: 🎓
+colorFrom: blue
+colorTo: indigo
+sdk: gradio
+sdk_version: 5.0.0
+app_file: app.py
+pinned: false
+license: mit
+short_description: Vignan Research Matching Chatbot
+---
 
-Since this is a LangGraph hackathon, I recommend adding a simple LangGraph router before submission. It doesn't have to be very complex, but it should demonstrate that you're actually using LangGraph to orchestrate your workflow.
+# Vignan Research Matching Chatbot
 
-Without LangGraph, your project may lose points under the Agent Design and Workflow Design criteria.
-
-I recommend we do one final step:
-
-Build a simple LangGraph router that decides between:
-
-Student queries (RAG)
-Professor queries
-Web search
-Project recommendations
+An AI-powered multi-agent research supervisor and project matching chatbot for Vignan University.
+Built with FastAPI, LangGraph, ChromaDB vector search, and Google Gemini 2.5 Flash LLM.
