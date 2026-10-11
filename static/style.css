@@ -323,14 +323,48 @@ body {
 .faculty-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 10px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.faculty-profile-snippet {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.faculty-avatar-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    border: 2px solid #E2E8F0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    background-color: #F8FAFC;
+    flex-shrink: 0;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.faculty-card:hover .faculty-avatar-img {
+    transform: scale(1.04);
+    border-color: var(--vignan-blue-primary);
 }
 
 .faculty-name {
     font-size: 18px;
     font-weight: 700;
     color: var(--vignan-blue-dark);
+    line-height: 1.2;
+}
+
+.faculty-dept-sub {
+    font-size: 12px;
+    color: #64748B;
+    font-weight: 600;
+    margin-top: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .match-score {

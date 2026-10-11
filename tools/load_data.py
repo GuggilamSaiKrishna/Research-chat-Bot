@@ -65,6 +65,7 @@ Publications: {', '.join(publications) if publications else 'N/A'}"""
                     "publications": "; ".join(publications),
                     "all_publications": json.dumps(publications),
                     "full_profile": full_profile,
+                    "image_url": prof.get("image_url", ""),
                 },
             )
         )

@@ -159,6 +159,14 @@ def parse_raw_profile(raw: dict) -> dict:
     raw_pubs.extend(extra_pubs)
     publications = _clean_list(raw_pubs)
 
+    empcode = str(raw.get("empcode", "")).strip()
+    profilepic = str(raw.get("profilepic", "")).strip()
+    image_url = ""
+    if empcode and profilepic:
+        image_url = f"https://vignan.ac.in/Facultyprofiles/uploads/{empcode}/{profilepic}"
+    elif empcode:
+        image_url = f"https://vignan.ac.in/Facultyprofiles/uploads/{empcode}/profilepic{empcode}.jpeg"
+
     return {
         "name": full_name,
         "department": department,
@@ -167,7 +175,8 @@ def parse_raw_profile(raw: dict) -> dict:
         "email": email,
         "research_areas": research_areas,
         "publications": publications,
-        "empcode": str(raw.get("empcode", "")).strip(),
+        "empcode": empcode,
+        "image_url": image_url,
     }
 
 

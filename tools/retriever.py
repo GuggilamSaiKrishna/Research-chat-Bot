@@ -131,6 +131,7 @@ Matching Publications: {', '.join(matched_pubs)}"""
             "matching_publications": matched_pubs,
             "score": best_score,
             "content": full_profile,
+            "image_url": prof.get("image_url", ""),
         })
 
     scored.sort(key=lambda x: x["score"], reverse=True)
@@ -216,6 +217,7 @@ def retrieve_faculty(query: str, k: int = 5):
                         "matching_pubs_dict": {},
                         "score": p_sim,
                         "full_profile": doc.metadata.get("full_profile", ""),
+                        "image_url": doc.metadata.get("image_url", ""),
                     }
 
                 current_dict = matches_dict[name]["matching_pubs_dict"]
@@ -251,6 +253,7 @@ Matching Publications: {pubs_str}"""
                 "matching_publications": filtered_pubs,
                 "score": data["score"],
                 "content": full_profile,
+                "image_url": data.get("image_url", ""),
             })
 
         formatted_matches.sort(key=lambda match: match["score"], reverse=True)

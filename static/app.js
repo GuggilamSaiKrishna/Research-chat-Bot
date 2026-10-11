@@ -164,10 +164,24 @@ function renderStudentResults(data) {
                     : [];
                 const areas = areaList.map(a => `<span class="tag">${a}</span>`).join(' ');
 
+                const facultyImg = faculty.image_url || '/static/default_avatar.svg';
+
                 html += `
                     <div class="faculty-card">
                         <div class="faculty-header">
-                            <div class="faculty-name">Prof. ${faculty.name}</div>
+                            <div class="faculty-profile-snippet">
+                                <img 
+                                    src="${facultyImg}" 
+                                    alt="Prof. ${faculty.name}" 
+                                    class="faculty-avatar-img" 
+                                    onerror="this.onerror=null; this.src='/static/default_avatar.svg';" 
+                                    loading="lazy"
+                                />
+                                <div>
+                                    <div class="faculty-name">Prof. ${faculty.name}</div>
+                                    <div class="faculty-dept-sub">${faculty.department}</div>
+                                </div>
+                            </div>
                             <div class="match-score">${faculty.score}% Match</div>
                         </div>
                         <div class="faculty-info-grid">
