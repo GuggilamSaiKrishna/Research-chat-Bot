@@ -50,41 +50,24 @@ Email: {email}
 Research Areas: {', '.join(research_areas) if research_areas else 'N/A'}
 Publications: {', '.join(publications) if publications else 'N/A'}"""
 
-        if publications:
-            for pub in publications:
-                pub_text = f"Faculty: {name}. Department: {department}. Research Areas: {', '.join(research_areas)}. Publication: {pub}"
-                documents.append(
-                    Document(
-                        page_content=pub_text,
-                        metadata={
-                            "name": name,
-                            "department": department,
-                            "mobile_number": str(mobile).strip(),
-                            "email": email,
-                            "research_areas": ", ".join(research_areas),
-                            "publication": pub,
-                            "all_publications": json.dumps(publications),
-                            "full_profile": full_profile,
-                        },
-                    )
-                )
-        elif research_areas:
-            area_text = f"Faculty: {name}. Department: {department}. Research Areas: {', '.join(research_areas)}."
-            documents.append(
-                Document(
-                    page_content=area_text,
-                    metadata={
-                        "name": name,
-                        "department": department,
-                        "mobile_number": str(mobile).strip(),
-                        "email": email,
-                        "research_areas": ", ".join(research_areas),
-                        "publication": "N/A",
-                        "all_publications": json.dumps([]),
-                        "full_profile": full_profile,
-                    },
-                )
+        sample_pubs = "; ".join(publications[:10]) if publications else "N/A"
+        doc_text = f"Faculty: {name}. Department: {department}. Research Areas: {', '.join(research_areas) if research_areas else 'N/A'}. Key Publications: {sample_pubs}"
+        documents.append(
+            Document(
+                page_content=doc_text,
+                metadata={
+                    "name": name,
+                    "department": department,
+                    "mobile_number": str(mobile).strip(),
+                    "email": email,
+                    "research_areas": ", ".join(research_areas),
+                    "publication": "",
+                    "publications": "; ".join(publications),
+                    "all_publications": json.dumps(publications),
+                    "full_profile": full_profile,
+                },
             )
+        )
 
     return documents
 
@@ -134,7 +117,7 @@ def load_faculty_data(rebuild: bool = False, scrape_live: bool = False) -> bool:
                 embedding_function=embeddings,
             )
 
-            batch_size = 20
+            batch_size = 40
             total_docs = len(documents)
             print(f"Embedding {total_docs} documents into Chroma in batches of {batch_size}...")
 

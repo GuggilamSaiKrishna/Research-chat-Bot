@@ -12,8 +12,8 @@ from tools.load_data import ensure_chroma_loaded
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup logic
-    ensure_chroma_loaded()
+    import asyncio
+    asyncio.create_task(asyncio.to_thread(ensure_chroma_loaded))
     yield
 
 app = FastAPI(title="Vignan Research Matching Chatbot", lifespan=lifespan)
@@ -57,4 +57,4 @@ if __name__ == "__main__":
     print("  Open in browser: http://localhost:8050")
     print("=======================================================\n")
     port = int(os.getenv("PORT", 8050))
-    uvicorn.run("server:app", host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=port)

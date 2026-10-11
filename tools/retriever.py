@@ -26,7 +26,9 @@ def get_db() -> Chroma | None:
     if _cached_db is not None:
         return _cached_db
     try:
-        ensure_chroma_loaded()
+        from tools.load_data import chroma_is_up_to_date
+        if not chroma_is_up_to_date():
+            return None
         api_key = get_google_api_key()
         if not api_key:
             return None
@@ -168,11 +170,14 @@ def retrieve_faculty(query: str, k: int = 5):
             research_areas = doc.metadata.get("research_areas", "N/A")
 
             pub = doc.metadata.get("publication")
-            if not pub:
-                pubs_text = doc.metadata.get("publications", "").strip()
-                if not pubs_text or pubs_text == "N/A":
+            if not pub or pub == "N/A":
+                raw_pubs = doc.metadata.get("all_publications") or doc.metadata.get("publications", "")
+                if not raw_pubs or raw_pubs == "N/A":
                     continue
-                pub_list = [p.strip() for p in pubs_text.split(",") if p.strip()]
+                try:
+                    pub_list = json.loads(raw_pubs)
+                except Exception:
+                    pub_list = [p.strip() for p in raw_pubs.split(";") if p.strip()]
             else:
                 pub_list = [pub.strip()]
 
