@@ -1,8 +1,4 @@
-from google import genai
-
-from config import get_google_api_key
-
-client = genai.Client(api_key=get_google_api_key())
+from config import get_genai_client
 
 def suggest_project(context, interest):
 
@@ -24,6 +20,7 @@ Suggest:
 Keep the answer short and clear.
 """
 
+    client = get_genai_client()
     response = client.models.generate_content(
         model="gemini-2.5-flash",
         contents=prompt

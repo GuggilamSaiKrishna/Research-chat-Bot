@@ -1,8 +1,4 @@
-from google import genai
-
-from config import get_google_api_key
-
-client = genai.Client(api_key=get_google_api_key())
+from config import get_genai_client
 
 
 def process_professor_query(query: str) -> str:
@@ -20,6 +16,7 @@ Answer with:
 Keep the answer concise.
 """
 
+    client = get_genai_client()
     response = client.models.generate_content(
         model="gemini-2.5-flash",
         contents=prompt,

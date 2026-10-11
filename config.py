@@ -24,3 +24,15 @@ def get_tavily_api_key() -> str | None:
 
 COLLEGE_DOMAIN = os.getenv("COLLEGE_DOMAIN", "vignan.ac.in")
 
+_genai_client = None
+
+def get_genai_client():
+    global _genai_client
+    if _genai_client is not None:
+        return _genai_client
+    from google import genai
+    key = get_google_api_key()
+    if not key:
+        raise ValueError("GOOGLE_API_KEY is not set. Please add GOOGLE_API_KEY to your environment variables.")
+    _genai_client = genai.Client(api_key=key)
+    return _genai_client

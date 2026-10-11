@@ -3,12 +3,10 @@ from typing import Literal, TypedDict
 from google import genai
 from langgraph.graph import END, START, StateGraph
 
-from config import get_google_api_key
+from config import get_genai_client, get_google_api_key
 from tools.collaboration import collaboration_match
 from tools.retriever import retrieve_faculty
 from tools.tavily_search import web_search
-
-client = genai.Client(api_key=get_google_api_key())
 
 
 class StudentState(TypedDict):
@@ -60,6 +58,7 @@ Question:
 {state["query"]}
 """
 
+    client = get_genai_client()
     response = client.models.generate_content(
         model="gemini-2.5-flash",
         contents=prompt,
